@@ -1,0 +1,46 @@
+// Places on the map. Edit freely: add trips, change texts.
+// kind: "lived" = lived, studied or worked there for a longer period
+//       "work"  = work trips / client visits
+export const places = [
+  { id: 'luxembourg', city: 'Luxembourg', country: 'Luxembourg', coords: [6.13, 49.61], kind: 'lived',
+    when: '1998–2006',
+    text: 'Grew up here. Later research analyst and business developer at Godvig Capital (2012–2014).' },
+  { id: 'london', city: 'London', country: 'United Kingdom', coords: [-0.13, 51.51], kind: 'lived',
+    when: '2011',
+    text: 'A semester at the Swedish School in London through the Europaprogrammet, living with a host family.' },
+  { id: 'lund', city: 'Lund', country: 'Sweden', coords: [13.19, 55.70], kind: 'lived',
+    when: '',
+    text: 'B.Sc. in Business and Economics at Lund University. Board member of Kurdistan Investment Company and part of Lundakarnevalen.' },
+  { id: 'gothenburg', city: 'Gothenburg', country: 'Sweden', coords: [11.97, 57.71], kind: 'lived',
+    when: '2016–now',
+    text: 'Chalmers (B.Sc. and M.Sc.), Volvo Cars, and since 2022 Application Specialist at Centiro. Home.' },
+  { id: 'kingston', city: 'Kingston', country: 'Canada', coords: [-76.48, 44.23], kind: 'lived',
+    when: 'Exchange',
+    text: 'Exchange at Queen\'s University, Smith School of Business: international business, negotiation, managing across cultures.' },
+  { id: 'milan', city: 'Milan', country: 'Italy', coords: [9.19, 45.46], kind: 'lived',
+    when: 'Exchange',
+    text: 'Exchange at Politecnico di Milano: design strategy, high-tech startups and social innovation.' },
+  { id: 'taipei', city: 'Taipei', country: 'Taiwan', coords: [121.56, 25.03], kind: 'lived',
+    when: '2020–2021',
+    text: 'Market intelligence analyst at Evonik Industries, then my master\'s thesis with IKEA Taiwan on refurbishing and reselling furniture.' },
+  { id: 'barcelona', city: 'Barcelona', country: 'Spain', coords: [2.17, 41.39], kind: 'lived',
+    when: '4 months',
+    text: 'Worked from Centiro\'s Barcelona office.' },
+  { id: 'geneva', city: 'Geneva', country: 'Switzerland', coords: [6.14, 46.20], kind: 'work',
+    when: '5+ visits',
+    text: 'Client work on site for Centiro.' },
+  { id: 'amsterdam', city: 'Amsterdam', country: 'Netherlands', coords: [4.90, 52.37], kind: 'work',
+    when: '2 visits',
+    text: 'Client work on site for Centiro.' },
+  { id: 'derby', city: 'Derby', country: 'United Kingdom', coords: [-1.48, 52.92], kind: 'work',
+    when: 'Work trip',
+    text: 'On site for Centiro.' },
+  { id: 'dallas', city: 'Dallas', country: 'United States of America', coords: [-96.80, 32.78], kind: 'work',
+    when: 'Work trip',
+    text: 'On site for Centiro.' },
+];
+
+export const kinds = {
+  lived: 'Lived, studied or worked',
+  work: 'Work trips',
+};
