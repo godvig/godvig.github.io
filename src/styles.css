@@ -6,6 +6,7 @@
   --gold: rgb(207, 181, 59);
   --orange: #fa923f;
   --green: #4fae7e;
+  --purple: #9b72d9;
   --text: #1d1d1d;
   --muted: #5a5a66;
 }
@@ -186,7 +187,8 @@ a:hover { color: var(--orange); }
 .map-page .page-header { color: var(--gold); }
 .map-page .text-block { color: #c9c9da; }
 
-.map-controls { display: flex; justify-content: center; gap: 0.5rem; margin: 1.25rem 0 1.5rem; }
+.map-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 1.25rem 0 1.5rem; }
+.map-controls button { white-space: nowrap; }
 .map-controls button, .place-list button {
   font: inherit; cursor: pointer;
   background: transparent; color: var(--gold);
@@ -200,16 +202,28 @@ a:hover { color: var(--orange); }
   display: grid; grid-template-columns: minmax(0, 1fr) 18rem; gap: 1.5rem;
   max-width: 76rem; margin: 0 auto; align-items: start;
 }
-.map-frame { border: 5px ridge var(--gold); background: var(--navy-deep); line-height: 0; }
+.map-frame { position: relative; border: 5px ridge var(--gold); background: var(--navy-deep); line-height: 0; }
+.map-frame svg { cursor: grab; touch-action: none; user-select: none; }
+.map-frame svg:active { cursor: grabbing; }
+.zoom-buttons { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; z-index: 2; line-height: 1; }
+.zoom-buttons button {
+  width: 34px; height: 34px; font: inherit; font-size: 1.3rem; font-weight: 700; cursor: pointer;
+  background: var(--navy); color: var(--gold); border: 2px solid var(--gold); border-radius: 6px;
+}
+.zoom-buttons button:hover { border-color: var(--orange); color: var(--orange); }
+.range { stroke: #b9b9c9; stroke-width: 0.8; stroke-dasharray: 3 2; pointer-events: none; }
+.hatch-line { stroke: #c4c4d4; }
 .map-frame svg { width: 100%; height: auto; display: block; }
 .ocean { fill: rgb(14, 14, 70); }
 .country { fill: #2e3a6e; stroke: rgb(14, 14, 70); stroke-width: 0.5; }
-.country.state { stroke-width: 0.35; }
-.country.life { fill: var(--gold); }
+.country.region { stroke-width: 0.35; }
+.country.lived { fill: var(--purple); }
+.country.work { fill: var(--gold); }
 .country.visited { fill: var(--green); }
 
 .marker { cursor: pointer; outline: none; }
 .marker circle { fill: var(--orange); stroke: #fff; stroke-width: 2; }
+.marker.lived circle { fill: var(--purple); }
 .marker.visited circle { fill: #fff; stroke: #1f7a4d; stroke-width: 2.5; }
 .marker.selected circle { fill: #fff; stroke: var(--orange); stroke-width: 4; }
 .marker:focus-visible circle { stroke: #fff; stroke-width: 5; }
@@ -223,7 +237,8 @@ a:hover { color: var(--orange); }
 .map-info h3 { margin: 0; font-size: 1.6rem; color: #fff; }
 .map-meta { margin: 0.2rem 0 0.75rem; color: var(--gold); font-weight: 600; }
 .swatch { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
-.swatch.life { background: var(--gold); }
+.swatch.lived { background: var(--purple); }
+.swatch.work { background: var(--gold); }
 .swatch.visited { background: var(--green); }
 
 .map-controls.filters { margin-top: -0.75rem; }
@@ -233,6 +248,8 @@ a:hover { color: var(--orange); }
 .map-controls .filter:not(.on) { text-decoration: line-through; }
 
 .place-group h4 { display: flex; align-items: center; gap: 0.5rem; margin: 1.4rem 0 0.6rem; font-size: 0.95rem; color: #c9c9da; font-weight: 600; }
+.place-list.lived button { color: #c7aef0; border-color: var(--purple); }
+.place-list.lived button.active { background: var(--purple); color: #fff; }
 .place-list.visited button { color: var(--green); border-color: var(--green); }
 .place-list.visited button.active { background: var(--green); color: var(--navy-deep); }
 .place-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
