@@ -287,3 +287,17 @@ footer { background: var(--grey); }
   .hello { padding-top: 1.5rem; }
   .piccontainer { padding-top: 2rem; }
 }
+
+/* Map symbols: mountains and football */
+.sym-mountain .rock { fill: #8a7a63; stroke: #fff; stroke-width: 1.5; stroke-linejoin: round; }
+.sym-mountain .snow { fill: #fff; }
+.sym-football .ball { fill: #fff; stroke: #111; stroke-width: 1.2; }
+.sym-football .patch { fill: #111; }
+.sym-football .seam { stroke: #111; stroke-width: 1; fill: none; }
+.marker.selected .sym-mountain .rock { stroke: var(--orange); stroke-width: 1.6; }
+.marker.selected .sym-football .ball { stroke: var(--orange); stroke-width: 2; }
+.marker:focus-visible .sym-mountain .rock, .marker:focus-visible .sym-football .ball { stroke: var(--orange); stroke-width: 2.5; }
+.legend-icon { width: 18px; height: 18px; flex: none; overflow: visible; }
+
+.place-list.mountain button, .place-list.football button { color: #e6e6f0; border-color: #8f8fb0; }
+.place-list.mountain button.active, .place-list.football button.active { background: #e6e6f0; color: var(--navy-deep); }

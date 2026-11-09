@@ -3,7 +3,7 @@ import { geoNaturalEarth1, geoPath, geoContains } from 'd3-geo';
 import { feature } from 'topojson-client';
 import world from 'world-atlas/countries-110m.json';
 import usAtlas from 'us-atlas/states-10m.json';
-import { places, kinds, views } from '../data/places.js';
+import { places, kinds, views, visitedCountries } from '../data/places.js';
 
 const W = 960, H = 500;
 const USA = 'United States of America';
@@ -26,10 +26,40 @@ for (const p of places) {
   if (st) stateOf[p.id] = st.properties.name;
 }
 
+// The symbol drawn for each kind of place, centred on 0,0
+function Symbol({ kind, selected }) {
+  const s = selected ? 1.5 : 1;
+  if (kind === 'mountain') {
+    return (
+      <g transform={`scale(${s})`} className="sym-mountain">
+        <path d="M-9,6 L0,-8 L9,6 Z" className="rock" />
+        <path d="M-3.2,-3 L0,-8 L3.2,-3 L1.2,-4.2 L0,-2.8 L-1.4,-4.2 Z" className="snow" />
+      </g>
+    );
+  }
+  if (kind === 'football') {
+    return (
+      <g transform={`scale(${s})`} className="sym-football">
+        <circle r="7" className="ball" />
+        <path d="M0,-2.6 L2.5,-0.8 L1.55,2.1 L-1.55,2.1 L-2.5,-0.8 Z" className="patch" />
+        <path d="M0,-2.6 L0,-7 M2.5,-0.8 L6.6,-2.1 M1.55,2.1 L4.1,5.6 M-1.55,2.1 L-4.1,5.6 M-2.5,-0.8 L-6.6,-2.1" className="seam" />
+      </g>
+    );
+  }
+  return <circle r={selected ? 9 : kind === 'visited' ? 4.5 : 6} />;
+}
+
+function Legend({ kind }) {
+  if (kind === 'mountain' || kind === 'football') {
+    return <svg className="legend-icon" viewBox="-10 -10 20 20" aria-hidden="true"><Symbol kind={kind} /></svg>;
+  }
+  return <span className={`swatch ${kind}`} />;
+}
+
 export default function TravelMap() {
   const [selected, setSelected] = useState('gothenburg');
   const [viewId, setViewId] = useState('world');
-  const [show, setShow] = useState({ life: true, visited: true });
+  const [show, setShow] = useState({ life: true, visited: true, mountain: true, football: true });
 
   const view = views.find(v => v.id === viewId);
   const visible = places.filter(p => show[p.kind]);
@@ -50,13 +80,17 @@ export default function TravelMap() {
     return { path: geoPath(projection), projection };
   }, [viewId]);
 
-  // Colour countries (and US states) by the strongest kind of place in them
+  // Countries (and US states) are yellow if they hold a work/life place, otherwise green if visited
   const fill = useMemo(() => {
     const byCountry = {}, byState = {};
+    const mark = (obj, key, kind) => {
+      const colour = kind === 'life' ? 'life' : 'visited';
+      if (obj[key] !== 'life') obj[key] = colour;
+    };
+    if (show.visited) visitedCountries.forEach(c => mark(byCountry, c, 'visited'));
     for (const p of visible) {
-      const set = (obj, key) => { if (obj[key] !== 'life') obj[key] = p.kind; };
-      set(byCountry, p.country);
-      if (stateOf[p.id]) set(byState, stateOf[p.id]);
+      mark(byCountry, p.country, p.kind);
+      if (stateOf[p.id]) mark(byState, stateOf[p.id], p.kind);
     }
     return { byCountry, byState };
   }, [show]);
@@ -73,7 +107,7 @@ export default function TravelMap() {
 
   const toggle = kind => {
     const next = { ...show, [kind]: !show[kind] };
-    if (!next.life && !next.visited) return; // keep at least one on
+    if (!Object.values(next).some(Boolean)) return; // keep at least one on
     setShow(next);
     const cur = places.find(p => p.id === selected);
     if (cur && !next[cur.kind]) setSelected(places.find(p => next[p.kind]).id);
@@ -81,11 +115,13 @@ export default function TravelMap() {
 
   const current = places.find(p => p.id === selected);
   const regional = Boolean(view.bounds);
+  // Draw the selected place last so it sits on top
+  const ordered = [...visible.filter(p => p.id !== selected), ...visible.filter(p => p.id === selected)];
 
   return (
     <section id="map" className="page map-page">
       <h2 className="page-header">Map</h2>
-      <p className="text-block center">Where I've lived, studied, worked and travelled. Click a dot.</p>
+      <p className="text-block center">Where I've lived, studied, worked and travelled. Click a symbol.</p>
 
       <div className="map-controls" role="group" aria-label="Map view">
         {views.map(v => (
@@ -95,7 +131,7 @@ export default function TravelMap() {
       <div className="map-controls filters" role="group" aria-label="Show on map">
         {Object.entries(kinds).map(([k, label]) => (
           <button key={k} className={`filter ${k}${show[k] ? ' on' : ''}`} aria-pressed={show[k]} onClick={() => toggle(k)}>
-            <span className={`swatch ${k}`} />{label}
+            <Legend kind={k} />{label}
           </button>
         ))}
       </div>
@@ -117,7 +153,7 @@ export default function TravelMap() {
               ))}
             </g>
             <g>
-              {visible.map(p => {
+              {ordered.map(p => {
                 const [x, y] = projection(p.coords);
                 if (x < 0 || x > W || y < 0 || y > H) return null;
                 const isSel = p.id === selected;
@@ -135,8 +171,8 @@ export default function TravelMap() {
                     onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), select(p.id))}
                   >
                     <title>{p.city}</title>
-                    <circle r={isSel ? 9 : p.kind === 'visited' ? 4.5 : 6} />
-                    {label && <text x="11" y="4">{p.city}</text>}
+                    <Symbol kind={p.kind} selected={isSel} />
+                    {label && <text x={isSel ? 14 : 11} y="4">{p.city}</text>}
                   </g>
                 );
               })}
@@ -149,7 +185,7 @@ export default function TravelMap() {
             <>
               <h3>{current.city}</h3>
               <p className="map-meta">
-                {stateOf[current.id] ? `${stateOf[current.id]}, USA` : current.country}
+                {stateOf[current.id] ? `${stateOf[current.id]}, USA` : current.country === current.city ? kinds[current.kind] : current.country}
                 {current.when ? ` · ${current.when}` : ''}
               </p>
               {current.text && <p>{current.text}</p>}
@@ -157,7 +193,7 @@ export default function TravelMap() {
           )}
           {Object.entries(kinds).filter(([k]) => show[k]).map(([k, label]) => (
             <div key={k} className="place-group">
-              <h4><span className={`swatch ${k}`} />{label}</h4>
+              <h4><Legend kind={k} />{label}</h4>
               <ul className={`place-list ${k}`}>
                 {places.filter(p => p.kind === k).map(p => (
                   <li key={p.id}>
