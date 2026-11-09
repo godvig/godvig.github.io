@@ -16,9 +16,8 @@ export default function About() {
           what's actually wrong, and shipping the fix myself.
         </p>
         <p>
-          In the evenings I build small things: a market data dashboard, a plugin for SteamOS, and a Greek-themed
-          town for Heroes of Might and Magic III with a friend. I first built this site in 2019 to learn React,
-          and I'm still improving it.
+          In the evenings I build small tools of my own, like a market data dashboard and a Decky Loader plugin
+          for SteamOS. I first built this site in 2019 to learn React, and I'm still improving it.
         </p>
       </div>
     </section>

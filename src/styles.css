@@ -5,6 +5,7 @@
   --navy-deep: rgb(10, 10, 50);
   --gold: rgb(207, 181, 59);
   --orange: #fa923f;
+  --green: #4fae7e;
   --text: #1d1d1d;
   --muted: #5a5a66;
 }
@@ -203,12 +204,13 @@ a:hover { color: var(--orange); }
 .map-frame svg { width: 100%; height: auto; display: block; }
 .ocean { fill: rgb(14, 14, 70); }
 .country { fill: #2e3a6e; stroke: rgb(14, 14, 70); stroke-width: 0.5; }
-.country.lived { fill: var(--gold); }
-.country.work { fill: #7a8fc7; }
+.country.state { stroke-width: 0.35; }
+.country.life { fill: var(--gold); }
+.country.visited { fill: var(--green); }
 
 .marker { cursor: pointer; outline: none; }
-.marker circle { fill: var(--orange); stroke: #fff; stroke-width: 2; transition: r 0.2s; }
-.marker.work circle { fill: #fff; stroke: var(--orange); }
+.marker circle { fill: var(--orange); stroke: #fff; stroke-width: 2; }
+.marker.visited circle { fill: #fff; stroke: #1f7a4d; stroke-width: 2.5; }
 .marker.selected circle { fill: #fff; stroke: var(--orange); stroke-width: 4; }
 .marker:focus-visible circle { stroke: #fff; stroke-width: 5; }
 .marker text {
@@ -220,11 +222,19 @@ a:hover { color: var(--orange); }
 .map-info { background: rgba(255, 255, 255, 0.05); border-left: 5px solid var(--gold); padding: 1.25rem 1.25rem 1.5rem; }
 .map-info h3 { margin: 0; font-size: 1.6rem; color: #fff; }
 .map-meta { margin: 0.2rem 0 0.75rem; color: var(--gold); font-weight: 600; }
-.legend { list-style: none; padding: 0; margin: 1.5rem 0 1rem; font-size: 0.92rem; color: #c9c9da; }
-.legend li { display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0; }
 .swatch { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
-.swatch.lived { background: var(--gold); }
-.swatch.work { background: #7a8fc7; }
+.swatch.life { background: var(--gold); }
+.swatch.visited { background: var(--green); }
+
+.map-controls.filters { margin-top: -0.75rem; }
+.map-controls .filter { display: inline-flex; align-items: center; gap: 0.5rem; color: #c9c9da; border-color: #55557a; }
+.map-controls .filter.on { background: transparent; color: #fff; border-color: #fff; }
+.map-controls .filter:not(.on) .swatch { opacity: 0.3; }
+.map-controls .filter:not(.on) { text-decoration: line-through; }
+
+.place-group h4 { display: flex; align-items: center; gap: 0.5rem; margin: 1.4rem 0 0.6rem; font-size: 0.95rem; color: #c9c9da; font-weight: 600; }
+.place-list.visited button { color: var(--green); border-color: var(--green); }
+.place-list.visited button.active { background: var(--green); color: var(--navy-deep); }
 .place-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .place-list button { padding: 0.15rem 0.7rem; font-size: 0.88rem; border-width: 1.5px; }
 
