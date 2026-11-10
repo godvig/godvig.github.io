@@ -333,7 +333,9 @@ export default function TravelMap() {
             <div key={k} className="place-group">
               <h4><Legend kind={k} />{label}</h4>
               <ul className={`place-list ${k}`}>
-                {places.filter(p => p.kind === k).map(p => (
+                {places.filter(p => p.kind === k)
+                  .sort((a, b) => (k === 'unesco' ? a.city.localeCompare(b.city) : 0))
+                  .map(p => (
                   <li key={p.id}>
                     <button className={p.id === selected ? 'active' : ''} onClick={() => select_(p.id)}>{p.city}</button>
                   </li>
