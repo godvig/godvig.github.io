@@ -348,3 +348,12 @@ footer { background: var(--grey); }
 .map-frame .marker circle.hit { fill: transparent; stroke: none; }
 
 .map-hint { margin: 0; color: #c9c9da; font-style: italic; }
+
+/* Project links */
+.project-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; }
+.project-links a { font-weight: 700; }
+.project-links .open-app {
+  background: var(--navy); color: var(--gold); text-decoration: none;
+  padding: 0.35rem 0.9rem; border-radius: 999px; border: 2px solid var(--navy);
+}
+.project-links .open-app:hover { background: var(--gold); color: var(--navy); }
