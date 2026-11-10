@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { geoNaturalEarth1, geoPath, geoContains, geoArea, geoBounds } from 'd3-geo';
+import { geoNaturalEarth1, geoPath, geoContains, geoArea } from 'd3-geo';
 import { feature } from 'topojson-client';
 import { zoom as d3zoom, zoomIdentity } from 'd3-zoom';
 import { select } from 'd3-selection';
@@ -13,7 +13,7 @@ import { ranges } from '../data/ranges.js';
 const W = 960, H = 500;
 const USA = 'United States of America';
 const CAN = 'Canada';
-const MAX_ZOOM = 40;
+const MAX_ZOOM = 300;
 
 // Kinds that colour a whole country, strongest first
 const FILL_RANK = { lived: 3, work: 2, visited: 1 };
@@ -191,12 +191,10 @@ export default function TravelMap() {
     animateTo(zoomIdentity.translate(W / 2 - k * x, H / 2 - k * y).scale(k));
   };
 
-  // Clicking a country zooms to it
-  const zoomToFeature = f => {
-    const [[w, s], [e, n]] = geoBounds(f);
-    if (e < w) return; // crosses the date line (e.g. Russia, Fiji): skip
-    setViewId(null);
-    animateTo(fitTransform([[w, s], [e, n]], 12));
+  // Clicking anywhere on the map that isn't a symbol clears the selection
+  // (a drag doesn't count as a click, so moving the map keeps it)
+  const onMapClick = e => {
+    if (!e.target.closest('.marker')) setSelected(null);
   };
 
   const visible = places.filter(p => show[p.kind]);
@@ -261,7 +259,7 @@ export default function TravelMap() {
             <button onClick={() => zoomBy(1.6)} aria-label="Zoom in">+</button>
             <button onClick={() => zoomBy(1 / 1.6)} aria-label="Zoom out">−</button>
           </div>
-          <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} role="img" aria-label="World map with the places Adam has lived, worked and visited">
+          <svg ref={svgRef} onClick={onMapClick} viewBox={`0 0 ${W} ${H}`} role="img" aria-label="World map with the places Adam has lived, worked and visited">
             <defs>
               <pattern id="range-hatch" patternUnits="userSpaceOnUse" width={hatch} height={hatch} patternTransform="rotate(45)">
                 <line x1="0" y1="0" x2="0" y2={hatch} className="hatch-line" strokeWidth={1.6 / t.k} />
@@ -271,13 +269,13 @@ export default function TravelMap() {
             <g transform={t.toString()}>
               {countries.map(c => (
                 <path key={c.id ?? c.properties.name} d={path(c)} vectorEffect="non-scaling-stroke"
-                  className={`country ${fill.byCountry[c.properties.name] || ''}`} onClick={() => zoomToFeature(c)}>
+                  className={`country ${fill.byCountry[c.properties.name] || ''}`}>
                   <title>{c.properties.name}</title>
                 </path>
               ))}
               {regions.map(r => (
                 <path key={r.country + r.properties.name} d={path(r)} vectorEffect="non-scaling-stroke"
-                  className={`country region ${fill.byRegion[r.properties.name] || ''}`} onClick={() => zoomToFeature(r)}>
+                  className={`country region ${fill.byRegion[r.properties.name] || ''}`}>
                   <title>{r.properties.name}</title>
                 </path>
               ))}
@@ -317,6 +315,7 @@ export default function TravelMap() {
         </div>
 
         <aside className="map-info" aria-live="polite">
+          {!current && <p className="map-hint">Click a symbol on the map to read about the place.</p>}
           {current && (
             <>
               <h3>{current.name || current.city}</h3>

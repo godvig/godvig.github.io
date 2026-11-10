@@ -346,3 +346,5 @@ footer { background: var(--grey); }
 
 /* Invisible, larger tap target around each map symbol */
 .map-frame .marker circle.hit { fill: transparent; stroke: none; }
+
+.map-hint { margin: 0; color: #c9c9da; font-style: italic; }
