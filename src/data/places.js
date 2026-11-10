@@ -1,10 +1,13 @@
 // Places on the map. Edit freely: add places, change texts.
 //
 // kind: "lived"    = places I've lived (purple)
-//       "work"     = work, studies and major life events (yellow)
+//       "work"     = places I've worked or studied (yellow)
 //       "visited"  = places I've visited (green)
 //       "mountain" = mountains and hiking (mountain symbol)
 //       "football" = places I've watched football (football symbol)
+//       "unesco"   = UNESCO World Heritage sites (diamond symbol)
+//                    heritage: "cultural" | "natural" | "mixed", unescoId: number in the UNESCO URL,
+//                    photo: optional jump photo, e.g. "/img/jump/zollverein.jpg" (put the file in public/img/jump/)
 // coords: [longitude, latitude]
 // region: optional US state / Canadian province, if it isn't found from the coordinates
 export const places = [
@@ -17,10 +20,10 @@ export const places = [
     text: 'A semester at the Swedish School in London through the Europaprogrammet, living with a host family.' },
   { id: 'lund', city: 'Lund', country: 'Sweden', coords: [13.19, 55.70], kind: 'lived',
     when: '',
-    text: 'B.Sc. in Business and Economics at Lund University. Board member of Kurdistan Investment Company and part of Lundakarnevalen.' },
+    text: 'Born here. B.Sc. in Business and Economics at Lund University. Board member of Kurdistan Investment Company and part of Lundakarnevalen.' },
   { id: 'gothenburg', city: 'Gothenburg', country: 'Sweden', coords: [11.97, 57.71], kind: 'lived',
     when: '2016–now',
-    text: 'Chalmers (B.Sc. and M.Sc.), Volvo Cars, and since 2022 Application Specialist at Centiro. Home.' },
+    text: 'Current home. Chalmers (B.Sc. and M.Sc.), Volvo Cars, and since 2022 Application Specialist at Centiro.' },
   { id: 'kingston', city: 'Kingston', country: 'Canada', coords: [-76.48, 44.23], kind: 'lived',
     when: 'Exchange',
     text: 'Exchange at Queen\'s University, Smith School of Business: international business, negotiation, managing across cultures.' },
@@ -89,13 +92,13 @@ export const places = [
 
   // ---------- Mountains ----------
   { id: 'kebnekaise', city: 'Kebnekaise', country: 'Sweden', coords: [18.53, 67.90], kind: 'mountain', when: '2018',
-    text: 'Sweden\'s highest mountain.' },
+    text: 'Peak · 2,096.8 m. Sweden\'s highest point: in August 2018 the rocky north peak (2,096.8 m) overtook the melting glacier on the south peak.' },
   { id: 'galdhopiggen', city: 'Galdhøpiggen', country: 'Norway', coords: [8.31, 61.64], kind: 'mountain', when: '2024',
-    text: 'Norway\'s highest mountain.' },
+    text: 'Peak · 2,469 m. Norway\'s highest.' },
   { id: 'etna', city: 'Mount Etna', country: 'Italy', coords: [15.00, 37.75], kind: 'mountain', when: '2019',
     text: 'The volcano on Sicily.' },
   { id: 'olympus', city: 'Mount Olympus', country: 'Greece', coords: [22.36, 40.09], kind: 'mountain', when: '2026',
-    text: 'Greece\'s highest mountain.' },
+    text: 'Peak · 2,918 m (Mytikas). Greece\'s highest.' },
   { id: 'stubaital', city: 'Stubaital', country: 'Austria', coords: [11.30, 47.11], kind: 'mountain', when: '2003',
     text: 'Valley in the Tyrolean Alps.' },
   { id: 'lac-blanc', city: 'Lac Blanc', country: 'France', coords: [6.89, 45.98], kind: 'mountain', when: '2022',
@@ -118,15 +121,24 @@ export const places = [
     text: 'Lugano – MFF' },
   { id: 'madrid', city: 'Madrid', country: 'Spain', coords: [-3.70, 40.42], kind: 'football', when: '2025',
     text: 'Real Madrid – MFF' },
+
+  // ---------- UNESCO World Heritage ----------
+  { id: 'zollverein', city: 'Zollverein', name: 'Zollverein Coal Mine Industrial Complex in Essen', country: 'Germany',
+    coords: [7.046, 51.491], kind: 'unesco', heritage: 'cultural', unescoId: 975, when: '2025', photo: '' },
+  { id: 'yosemite', city: 'Yosemite', name: 'Yosemite National Park', country: 'United States of America',
+    coords: [-119.597, 37.746], kind: 'unesco', heritage: 'natural', unescoId: 308, when: '2014', photo: '' },
+  { id: 'olympus-whs', city: 'Mount Olympus area', name: 'The wider area of Mount Olympus', country: 'Greece',
+    coords: [22.42, 40.14], kind: 'unesco', heritage: 'mixed', unescoId: 1719, when: '2026', photo: '' },
 ];
 
-// Countries I've visited that have no pin of their own (coloured green).
-// Names must match the map data (e.g. "Czechia", "Bosnia and Herz.").
+// Whole countries to colour, per category. Names must match the map data (e.g. "Czechia", "Bosnia and Herz.").
+export const workCountries = ['Sweden', 'Luxembourg', 'Italy', 'Spain', 'Taiwan'];
+
 export const visitedCountries = [
   'Morocco', 'Belgium', 'Netherlands', 'Norway', 'Denmark', 'Latvia', 'Lithuania',
   'Czechia', 'Slovenia', 'Austria', 'Switzerland', 'Germany', 'France', 'Poland',
   'Croatia', 'Serbia', 'Hungary', 'Russia', 'Cyprus', 'Portugal', 'Ireland',
-  'Finland', 'Egypt',
+  'Finland', 'Egypt', 'Greece', 'Ukraine', 'United Kingdom', 'Spain', 'Luxembourg', 'Sweden', 'Iraq',
 ];
 
 // US states and Canadian provinces visited without a pin of their own (coloured green).
@@ -136,10 +148,17 @@ export const visitedRegions = [
 
 export const kinds = {
   lived: 'Lived',
-  work: 'Work and studies',
+  work: 'Worked or studied',
   visited: 'Visited',
   mountain: 'Mountains',
   football: 'Football',
+  unesco: 'World Heritage',
+};
+
+export const heritageTypes = {
+  cultural: 'Cultural heritage',
+  natural: 'Natural heritage',
+  mixed: 'Cultural and natural heritage',
 };
 
 // Map views. [[west, south], [east, north]] in degrees.

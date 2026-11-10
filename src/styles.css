@@ -318,3 +318,28 @@ footer { background: var(--grey); }
 
 .place-list.mountain button, .place-list.football button { color: #e6e6f0; border-color: #8f8fb0; }
 .place-list.mountain button.active, .place-list.football button.active { background: #e6e6f0; color: var(--navy-deep); }
+
+/* Selected place: red with white outline */
+.marker.selected circle { fill: #e53935; stroke: #fff; stroke-width: 3; }
+.marker .halo { fill: #e53935; stroke: #fff; stroke-width: 2.5; }
+.marker.selected .sym-mountain .rock, .marker.selected .sym-football .ball { stroke: #fff; stroke-width: 1.2; }
+
+/* UNESCO World Heritage symbol: diamond, cultural = sand, natural = teal, mixed = half and half */
+.sym-unesco .edge { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linejoin: round; }
+.sym-unesco .dot { fill: #fff; }
+.sym-unesco.cultural .left, .sym-unesco.cultural .right { fill: #d9a441; }
+.sym-unesco.natural .left, .sym-unesco.natural .right { fill: #2f9e8f; }
+.sym-unesco.mixed .left { fill: #d9a441; }
+.sym-unesco.mixed .right { fill: #2f9e8f; }
+
+.heritage { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
+.heritage a { color: var(--gold); }
+.heritage a:hover { color: var(--orange); }
+.heritage-tag { font-size: 0.85rem; font-weight: 700; padding: 0.1rem 0.6rem; border-radius: 999px; color: var(--navy-deep); }
+.heritage-tag.cultural { background: #d9a441; }
+.heritage-tag.natural { background: #2f9e8f; color: #fff; }
+.heritage-tag.mixed { background: linear-gradient(90deg, #d9a441 50%, #2f9e8f 50%); }
+.jump-photo { display: block; width: 100%; height: auto; margin-top: 0.75rem; border: 3px solid var(--gold); }
+
+.place-list.unesco button { color: #e6e6f0; border-color: #8f8fb0; }
+.place-list.unesco button.active { background: #e6e6f0; color: var(--navy-deep); }

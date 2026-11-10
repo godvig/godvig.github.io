@@ -7,7 +7,7 @@ import 'd3-transition';
 import world from '../data/world.json';
 import usAtlas from '../data/us-states.json';
 import canadaAtlas from '../data/canada-provinces.json';
-import { places, kinds, views, visitedCountries, visitedRegions } from '../data/places.js';
+import { places, kinds, views, workCountries, visitedCountries, visitedRegions, heritageTypes } from '../data/places.js';
 import { ranges } from '../data/ranges.js';
 
 const W = 960, H = 500;
@@ -84,22 +84,44 @@ function fitTransform([[w, s], [e, n]], maxK = MAX_ZOOM) {
 }
 
 // ---------- Symbols ----------
-function Symbol({ kind, selected }) {
-  const s = selected ? 1.5 : 1;
+function Symbol({ kind, heritage = 'mixed', selected }) {
+  const s = selected ? 1.4 : 1;
+  // Selected symbols get a red ring with a white outline behind them
+  const halo = selected && kind !== 'lived' && kind !== 'work' && kind !== 'visited'
+    ? <circle r="14" className="halo" /> : null;
+  if (kind === 'unesco') {
+    return (
+      <g>
+        {halo}
+        <g transform={`scale(${s})`} className={`sym-unesco ${heritage}`}>
+          <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="left" />
+          <path d="M0,-8 L8,0 L0,8 Z" className="right" />
+          <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="edge" />
+          <circle r="2.4" className="dot" />
+        </g>
+      </g>
+    );
+  }
   if (kind === 'mountain') {
     return (
-      <g transform={`scale(${s})`} className="sym-mountain">
-        <path d="M-9,6 L0,-8 L9,6 Z" className="rock" />
-        <path d="M-3.2,-3 L0,-8 L3.2,-3 L1.2,-4.2 L0,-2.8 L-1.4,-4.2 Z" className="snow" />
+      <g>
+        {halo}
+        <g transform={`scale(${s})`} className="sym-mountain">
+          <path d="M-9,6 L0,-8 L9,6 Z" className="rock" />
+          <path d="M-3.2,-3 L0,-8 L3.2,-3 L1.2,-4.2 L0,-2.8 L-1.4,-4.2 Z" className="snow" />
+        </g>
       </g>
     );
   }
   if (kind === 'football') {
     return (
-      <g transform={`scale(${s})`} className="sym-football">
-        <circle r="7" className="ball" />
-        <path d="M0,-2.6 L2.5,-0.8 L1.55,2.1 L-1.55,2.1 L-2.5,-0.8 Z" className="patch" />
-        <path d="M0,-2.6 L0,-7 M2.5,-0.8 L6.6,-2.1 M1.55,2.1 L4.1,5.6 M-1.55,2.1 L-4.1,5.6 M-2.5,-0.8 L-6.6,-2.1" className="seam" />
+      <g>
+        {halo}
+        <g transform={`scale(${s})`} className="sym-football">
+          <circle r="7" className="ball" />
+          <path d="M0,-2.6 L2.5,-0.8 L1.55,2.1 L-1.55,2.1 L-2.5,-0.8 Z" className="patch" />
+          <path d="M0,-2.6 L0,-7 M2.5,-0.8 L6.6,-2.1 M1.55,2.1 L4.1,5.6 M-1.55,2.1 L-4.1,5.6 M-2.5,-0.8 L-6.6,-2.1" className="seam" />
+        </g>
       </g>
     );
   }
@@ -107,7 +129,7 @@ function Symbol({ kind, selected }) {
 }
 
 function Legend({ kind }) {
-  if (kind === 'mountain' || kind === 'football') {
+  if (kind === 'mountain' || kind === 'football' || kind === 'unesco') {
     return <svg className="legend-icon" viewBox="-10 -10 20 20" aria-hidden="true"><Symbol kind={kind} /></svg>;
   }
   return <span className={`swatch ${kind}`} />;
@@ -120,7 +142,7 @@ export default function TravelMap() {
   const [t, setT] = useState(zoomIdentity);
   const [selected, setSelected] = useState('gothenburg');
   const [viewId, setViewId] = useState('world');
-  const [show, setShow] = useState({ lived: true, work: true, visited: true, mountain: true, football: true });
+  const [show, setShow] = useState({ lived: true, work: false, visited: false, mountain: false, football: false, unesco: false });
 
   // Set up zoom: scroll wheel, pinch, double-click and dragging with the hand cursor
   useEffect(() => {
@@ -148,12 +170,16 @@ export default function TravelMap() {
     animateTo(v.bounds ? fitTransform(v.bounds) : zoomIdentity);
   };
 
-  // Pan (and zoom in a bit if needed) so the place ends up in the middle
+  // Places in the middle half of the map are just selected.
+  // Places towards the edges (or off screen) make the map pan and zoom to them.
   const select_ = id => {
     const p = places.find(x => x.id === id);
     setSelected(id);
-    setViewId(null);
     const [x, y] = projection(p.coords);
+    const [sx, sy] = t.apply([x, y]);
+    const central = sx > W * 0.25 && sx < W * 0.75 && sy > H * 0.25 && sy < H * 0.75;
+    if (central) return;
+    setViewId(null);
     const k = Math.max(t.k, 3);
     animateTo(zoomIdentity.translate(W / 2 - k * x, H / 2 - k * y).scale(k));
   };
@@ -176,6 +202,7 @@ export default function TravelMap() {
       if (!FILL_RANK[kind]) return;
       if (!obj[key] || FILL_RANK[kind] > FILL_RANK[obj[key]]) obj[key] = kind;
     };
+    if (show.work) workCountries.forEach(c => mark(byCountry, c, 'work'));
     if (show.visited) {
       visitedCountries.forEach(c => mark(byCountry, c, 'visited'));
       visitedRegions.forEach(r => mark(byRegion, r, 'visited'));
@@ -269,8 +296,8 @@ export default function TravelMap() {
                     onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), select_(p.id))}
                   >
                     <title>{p.city}</title>
-                    <Symbol kind={p.kind} selected={isSel} />
-                    {label && <text x={isSel ? 14 : 11} y="4">{p.city}</text>}
+                    <Symbol kind={p.kind} heritage={p.heritage} selected={isSel} />
+                    {label && <text x={isSel ? 17 : 11} y="4">{p.city}</text>}
                   </g>
                 );
               })}
@@ -281,14 +308,25 @@ export default function TravelMap() {
         <aside className="map-info" aria-live="polite">
           {current && (
             <>
-              <h3>{current.city}</h3>
+              <h3>{current.name || current.city}</h3>
               <p className="map-meta">
                 {regionOf[current.id]
                   ? `${regionOf[current.id]}, ${current.country === USA ? 'USA' : 'Canada'}`
                   : current.country === current.city ? kinds[current.kind] : current.country}
                 {current.when ? ` · ${current.when}` : ''}
               </p>
+              {current.kind === 'unesco' && (
+                <p className="heritage">
+                  <span className={`heritage-tag ${current.heritage}`}>{heritageTypes[current.heritage]}</span>
+                  <a href={`https://whc.unesco.org/en/list/${current.unescoId}/`} target="_blank" rel="noopener noreferrer">
+                    UNESCO World Heritage page
+                  </a>
+                </p>
+              )}
               {current.text && <p>{current.text}</p>}
+              {current.photo && (
+                <img className="jump-photo" src={current.photo} alt={`Jump photo at ${current.name || current.city}`} loading="lazy" />
+              )}
             </>
           )}
           {Object.entries(kinds).filter(([k]) => show[k]).map(([k, label]) => (
