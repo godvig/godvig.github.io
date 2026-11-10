@@ -1,7 +1,17 @@
-// Places on the map. Edit freely: add trips, change texts.
-// kind: "lived" = lived, studied or worked there for a longer period
-//       "work"  = work trips / client visits
+// Places on the map. Edit freely: add places, change texts.
+//
+// kind: "lived"    = places I've lived (purple)
+//       "work"     = places I've worked or studied (yellow)
+//       "visited"  = places I've visited (green)
+//       "mountain" = mountains and hiking (mountain symbol)
+//       "football" = places I've watched football (football symbol)
+//       "unesco"   = UNESCO World Heritage sites (diamond symbol)
+//                    heritage: "cultural" | "natural" | "mixed", unescoId: number in the UNESCO URL,
+//                    photo: optional jump photo, e.g. "/img/jump/zollverein.jpg" (put the file in public/img/jump/)
+// coords: [longitude, latitude]
+// region: optional US state / Canadian province, if it isn't found from the coordinates
 export const places = [
+  // ---------- Lived ----------
   { id: 'luxembourg', city: 'Luxembourg', country: 'Luxembourg', coords: [6.13, 49.61], kind: 'lived',
     when: '1998–2006',
     text: 'Grew up here. Later research analyst and business developer at Godvig Capital (2012–2014).' },
@@ -10,10 +20,10 @@ export const places = [
     text: 'A semester at the Swedish School in London through the Europaprogrammet, living with a host family.' },
   { id: 'lund', city: 'Lund', country: 'Sweden', coords: [13.19, 55.70], kind: 'lived',
     when: '',
-    text: 'B.Sc. in Business and Economics at Lund University. Board member of Kurdistan Investment Company and part of Lundakarnevalen.' },
+    text: 'Born here. B.Sc. in Business and Economics at Lund University. Board member of Kurdistan Investment Company and part of Lundakarnevalen.' },
   { id: 'gothenburg', city: 'Gothenburg', country: 'Sweden', coords: [11.97, 57.71], kind: 'lived',
     when: '2016–now',
-    text: 'Chalmers (B.Sc. and M.Sc.), Volvo Cars, and since 2022 Application Specialist at Centiro. Home.' },
+    text: 'Current home. Chalmers (B.Sc. and M.Sc.), Volvo Cars, and since 2022 Application Specialist at Centiro.' },
   { id: 'kingston', city: 'Kingston', country: 'Canada', coords: [-76.48, 44.23], kind: 'lived',
     when: 'Exchange',
     text: 'Exchange at Queen\'s University, Smith School of Business: international business, negotiation, managing across cultures.' },
@@ -26,6 +36,11 @@ export const places = [
   { id: 'barcelona', city: 'Barcelona', country: 'Spain', coords: [2.17, 41.39], kind: 'lived',
     when: '4 months',
     text: 'Worked from Centiro\'s Barcelona office.' },
+
+  // ---------- Work, studies and major life events ----------
+  { id: 'erbil', city: 'Erbil', country: 'Iraq', coords: [44.01, 36.19], kind: 'work',
+    when: '2014',
+    text: 'Erbil, Kurdistan Region of Iraq.' },
   { id: 'geneva', city: 'Geneva', country: 'Switzerland', coords: [6.14, 46.20], kind: 'work',
     when: '5+ visits',
     text: 'Client work on site for Centiro.' },
@@ -34,13 +49,221 @@ export const places = [
     text: 'Client work on site for Centiro.' },
   { id: 'derby', city: 'Derby', country: 'United Kingdom', coords: [-1.48, 52.92], kind: 'work',
     when: 'Work trip',
-    text: 'On site for Centiro.' },
+    text: 'Client work on site for Centiro.' },
   { id: 'dallas', city: 'Dallas', country: 'United States of America', coords: [-96.80, 32.78], kind: 'work',
     when: 'Work trip',
-    text: 'On site for Centiro.' },
+    text: 'Client work on site for Centiro.' },
+
+  // ---------- Visited ----------
+  { id: 'tokyo', city: 'Tokyo', country: 'Japan', coords: [139.69, 35.69], kind: 'visited', when: '2011' },
+  { id: 'kyoto', city: 'Kyoto', country: 'Japan', coords: [135.77, 35.01], kind: 'visited', when: '2012' },
+  { id: 'himeji', city: 'Himeji', country: 'Japan', coords: [134.69, 34.82], kind: 'visited', when: '2012' },
+  { id: 'hiroshima', city: 'Hiroshima', country: 'Japan', coords: [132.46, 34.39], kind: 'visited', when: '2012' },
+  { id: 'beijing', city: 'Beijing', country: 'China', coords: [116.40, 39.90], kind: 'visited', when: '2013' },
+  { id: 'new-delhi', city: 'New Delhi', country: 'India', coords: [77.21, 28.61], kind: 'visited', when: '2025' },
+  { id: 'jaipur', city: 'Jaipur', country: 'India', coords: [75.79, 26.91], kind: 'visited', when: '2025' },
+  { id: 'istanbul', city: 'Istanbul', country: 'Turkey', coords: [28.98, 41.01], kind: 'visited', when: '2014' },
+  { id: 'nairobi', city: 'Nairobi', country: 'Kenya', coords: [36.82, -1.29], kind: 'visited', when: '2023' },
+  { id: 'mombasa', city: 'Mombasa', country: 'Kenya', coords: [39.67, -4.04], kind: 'visited', when: '2023' },
+  { id: 'kaohsiung', city: 'Kaohsiung', country: 'Taiwan', coords: [120.30, 22.63], kind: 'visited', when: '2020' },
+  { id: 'tainan', city: 'Tainan', country: 'Taiwan', coords: [120.21, 22.99], kind: 'visited', when: '2020' },
+  { id: 'kenting', city: 'Kenting', country: 'Taiwan', coords: [120.80, 21.95], kind: 'visited', when: '2020' },
+  { id: 'fort-worth', city: 'Fort Worth', country: 'United States of America', coords: [-97.33, 32.76], kind: 'visited', when: '2025' },
+  { id: 'new-york', city: 'New York', country: 'United States of America', coords: [-74.01, 40.71], kind: 'visited', when: '2008' },
+  { id: 'washington', city: 'Washington, D.C.', country: 'United States of America', coords: [-77.04, 38.91], kind: 'visited', when: '2011' },
+  { id: 'boston', city: 'Boston', country: 'United States of America', coords: [-71.06, 42.36], kind: 'visited', when: '2015' },
+  { id: 'seattle', city: 'Seattle', country: 'United States of America', coords: [-122.33, 47.61], kind: 'visited', when: '2015' },
+  { id: 'san-francisco', city: 'San Francisco', country: 'United States of America', coords: [-122.42, 37.77], kind: 'visited', when: '2015' },
+  { id: 'los-angeles', city: 'Los Angeles', country: 'United States of America', coords: [-118.24, 34.05], kind: 'visited', when: '2015' },
+  { id: 'las-vegas', city: 'Las Vegas', country: 'United States of America', coords: [-115.14, 36.17], kind: 'visited', when: '2015' },
+  { id: 'montreal', city: 'Montreal', country: 'Canada', region: 'Québec', coords: [-73.57, 45.50], kind: 'visited', when: '2015' },
+  { id: 'toronto', city: 'Toronto', country: 'Canada', coords: [-79.38, 43.65], kind: 'visited', when: '2015' },
+  { id: 'ottawa', city: 'Ottawa', country: 'Canada', coords: [-75.70, 45.42], kind: 'visited', when: '2015' },
+  { id: 'vancouver', city: 'Vancouver', country: 'Canada', coords: [-123.12, 49.28], kind: 'visited', when: '2015' },
+  { id: 'kelowna', city: 'Kelowna', country: 'Canada', coords: [-119.50, 49.89], kind: 'visited', when: '2024' },
+  { id: 'sarajevo', city: 'Sarajevo', country: 'Bosnia and Herz.', coords: [18.41, 43.86], kind: 'visited', when: '2021' },
+  { id: 'lisbon', city: 'Lisbon', country: 'Portugal', coords: [-9.14, 38.72], kind: 'visited', when: '2023' },
+  { id: 'dublin', city: 'Dublin', country: 'Ireland', coords: [-6.26, 53.35], kind: 'visited', when: '2023' },
+  { id: 'san-marino', city: 'San Marino', country: 'San Marino', coords: [12.45, 43.94], kind: 'visited', when: '2019' },
+  { id: 'vatican', city: 'Vatican City', country: 'Vatican', coords: [12.45, 41.90], kind: 'visited', when: '2019' },
+  { id: 'liechtenstein', city: 'Liechtenstein', country: 'Liechtenstein', coords: [9.52, 47.14], kind: 'visited', when: '2019' },
+  { id: 'andorra', city: 'Andorra', country: 'Andorra', coords: [1.52, 42.51], kind: 'visited', when: '2020' },
+  { id: 'malta', city: 'Malta', country: 'Malta', coords: [14.51, 35.90], kind: 'visited', when: '' },
+
+  // ---------- Mountains ----------
+  { id: 'kebnekaise', city: 'Kebnekaise', country: 'Sweden', coords: [18.53, 67.90], kind: 'mountain', when: '2018',
+    text: 'Peak · 2,096.8 m. Sweden\'s highest point: in August 2018 the rocky north peak (2,096.8 m) overtook the melting glacier on the south peak.' },
+  { id: 'galdhopiggen', city: 'Galdhøpiggen', country: 'Norway', coords: [8.31, 61.64], kind: 'mountain', when: '2024',
+    text: 'Peak · 2,469 m. Norway\'s highest.' },
+  { id: 'etna', city: 'Mount Etna', country: 'Italy', coords: [15.00, 37.75], kind: 'mountain', when: '2019',
+    text: 'The volcano on Sicily.' },
+  { id: 'olympus', city: 'Mount Olympus', country: 'Greece', coords: [22.36, 40.09], kind: 'mountain', when: '2026',
+    text: 'Peak · 2,918 m (Mytikas). Greece\'s highest.' },
+  { id: 'stubaital', city: 'Stubaital', country: 'Austria', coords: [11.30, 47.11], kind: 'mountain', when: '2003',
+    text: 'Valley in the Tyrolean Alps.' },
+  { id: 'lac-blanc', city: 'Lac Blanc', country: 'France', coords: [6.89, 45.98], kind: 'mountain', when: '2022',
+    text: 'Alpine lake above Chamonix, facing Mont Blanc.' },
+  { id: 'adirondacks', city: 'Adirondacks', country: 'United States of America', coords: [-74.10, 44.10], kind: 'mountain', when: '2014',
+    text: 'Mountains in upstate New York.' },
+  { id: 'taroko', city: 'Taroko Gorge', country: 'Taiwan', coords: [121.55, 24.17], kind: 'mountain', when: '2020',
+    text: 'Marble gorge in Taiwan\'s Central Mountain Range.' },
+  { id: 'banff', city: 'Banff', country: 'Canada', coords: [-115.57, 51.18], kind: 'mountain', when: '2024',
+    text: 'In the Canadian Rockies.' },
+
+  // ---------- Football ----------
+  { id: 'glasgow', city: 'Glasgow', country: 'United Kingdom', coords: [-4.25, 55.86], kind: 'football', when: '2015',
+    text: 'Celtic – MFF' },
+  { id: 'paris', city: 'Paris', country: 'France', coords: [2.35, 48.86], kind: 'football', when: '2015',
+    text: 'PSG – MFF' },
+  { id: 'lviv', city: 'Lviv', country: 'Ukraine', coords: [24.03, 49.84], kind: 'football', when: '2015',
+    text: 'Shakhtar Donetsk – MFF' },
+  { id: 'st-gallen', city: 'St. Gallen', country: 'Switzerland', coords: [9.37, 47.42], kind: 'football', when: '2019',
+    text: 'Lugano – MFF' },
+  { id: 'madrid', city: 'Madrid', country: 'Spain', coords: [-3.70, 40.42], kind: 'football', when: '2025',
+    text: 'Real Madrid – MFF' },
+
+  // ---------- UNESCO World Heritage ----------
+  { id: 'zollverein', city: 'Zollverein', name: 'Zollverein Coal Mine Industrial Complex in Essen', country: 'Germany',
+    coords: [7.046, 51.491], kind: 'unesco', heritage: 'cultural', unescoId: 975, when: '2025', photo: '' },
+  { id: 'yosemite', city: 'Yosemite', name: 'Yosemite National Park', country: 'United States of America',
+    coords: [-119.597, 37.746], kind: 'unesco', heritage: 'natural', unescoId: 308, when: '2014', photo: '' },
+  { id: 'olympus-whs', city: 'Mount Olympus area', name: 'The wider area of Mount Olympus', country: 'Greece',
+    coords: [22.42, 40.14], kind: 'unesco', heritage: 'mixed', unescoId: 1719, when: '2026', photo: '' },
+  { id: 'hagia-sophia', city: 'Hagia Sophia (Istanbul)', name: 'Historic Areas of Istanbul', country: 'Turkey',
+    coords: [28.98, 41.009], kind: 'unesco', heritage: 'cultural', unescoId: 356, when: '2014', photo: '' },
+  { id: 'meteora', city: 'Meteora', name: 'Meteora', country: 'Greece',
+    coords: [21.631, 39.722], kind: 'unesco', heritage: 'mixed', unescoId: 455, when: '', photo: '' },
+  { id: 'tanum', city: 'Tanum rock carvings', name: 'Rock Carvings in Tanum', country: 'Sweden',
+    coords: [11.34, 58.7], kind: 'unesco', heritage: 'cultural', unescoId: 557, when: '', photo: '' },
+  { id: 'aachen', city: 'Aachen Cathedral', name: 'Aachen Cathedral', country: 'Germany',
+    coords: [6.084, 50.775], kind: 'unesco', heritage: 'cultural', unescoId: 3, when: '', photo: '' },
+  { id: 'canadian-rockies', city: 'Canadian Rockies', name: 'Canadian Rocky Mountain Parks', country: 'Canada',
+    coords: [-116.18, 51.42], kind: 'unesco', heritage: 'natural', unescoId: 304, when: '2024', photo: '' },
+  { id: 'great-wall', city: 'Great Wall', name: 'The Great Wall', country: 'China',
+    coords: [116.02, 40.36], kind: 'unesco', heritage: 'cultural', unescoId: 438, when: '2013', photo: '' },
+  { id: 'summer-palace', city: 'Summer Palace', name: 'Summer Palace, an Imperial Garden in Beijing', country: 'China',
+    coords: [116.275, 39.999], kind: 'unesco', heritage: 'cultural', unescoId: 880, when: '2013', photo: '' },
+  { id: 'temple-of-heaven', city: 'Temple of Heaven', name: 'Temple of Heaven: an Imperial Sacrificial Altar in Beijing', country: 'China',
+    coords: [116.407, 39.882], kind: 'unesco', heritage: 'cultural', unescoId: 881, when: '2013', photo: '' },
+  { id: 'rideau', city: 'Rideau Canal', name: 'Rideau Canal', country: 'Canada',
+    coords: [-75.69, 45.43], kind: 'unesco', heritage: 'cultural', unescoId: 1221, when: '2015', photo: '' },
+  { id: 'mostar', city: 'Mostar Bridge', name: 'Old Bridge Area of the Old City of Mostar', country: 'Bosnia and Herz.',
+    coords: [17.815, 43.337], kind: 'unesco', heritage: 'cultural', unescoId: 946, when: '', photo: '' },
+  { id: 'grand-place', city: 'Grand-Place, Brussels', name: 'La Grand-Place, Brussels', country: 'Belgium',
+    coords: [4.3525, 50.8467], kind: 'unesco', heritage: 'cultural', unescoId: 857, when: '', photo: '' },
+  { id: 'spa', city: 'Spa', name: 'The Great Spa Towns of Europe (Spa)', country: 'Belgium',
+    coords: [5.866, 50.4925], kind: 'unesco', heritage: 'cultural', unescoId: 1613, when: '', photo: '' },
+  { id: 'schonbrunn', city: 'Schönbrunn', name: 'Palace and Gardens of Schönbrunn', country: 'Austria',
+    coords: [16.312, 48.185], kind: 'unesco', heritage: 'cultural', unescoId: 786, when: '', photo: '' },
+  { id: 'vienna', city: 'Vienna', name: 'Historic Centre of Vienna', country: 'Austria',
+    coords: [16.373, 48.209], kind: 'unesco', heritage: 'cultural', unescoId: 1033, when: '', photo: '' },
+  { id: 'salzburg', city: 'Salzburg', name: 'Historic Centre of the City of Salzburg', country: 'Austria',
+    coords: [13.04, 47.8], kind: 'unesco', heritage: 'cultural', unescoId: 784, when: '', photo: '' },
+  { id: 'madriu', city: 'Madriu-Perafita-Claror Valley', name: 'Madriu-Perafita-Claror Valley', country: 'Andorra',
+    coords: [1.58, 42.48], kind: 'unesco', heritage: 'cultural', unescoId: 1160, when: '2020', photo: '' },
+  { id: 'prague', city: 'Prague', name: 'Historic Centre of Prague', country: 'Czechia',
+    coords: [14.421, 50.0875], kind: 'unesco', heritage: 'cultural', unescoId: 616, when: '', photo: '' },
+  { id: 'kronborg', city: 'Kronborg', name: 'Kronborg Castle', country: 'Denmark',
+    coords: [12.621, 56.039], kind: 'unesco', heritage: 'cultural', unescoId: 696, when: '', photo: '' },
+  { id: 'roskilde', city: 'Roskilde Cathedral', name: 'Roskilde Cathedral', country: 'Denmark',
+    coords: [12.08, 55.643], kind: 'unesco', heritage: 'cultural', unescoId: 695, when: '', photo: '' },
+  { id: 'aalto-house', city: 'Aalto House', name: 'Aalto Works (The Aalto House, Helsinki)', country: 'Finland',
+    coords: [24.88, 60.189], kind: 'unesco', heritage: 'cultural', unescoId: 1752, when: '', photo: '' },
+  { id: 'suomenlinna', city: 'Suomenlinna', name: 'Fortress of Suomenlinna', country: 'Finland',
+    coords: [24.988, 60.145], kind: 'unesco', heritage: 'cultural', unescoId: 583, when: '', photo: '' },
+  { id: 'rauma', city: 'Old Rauma', name: 'Old Rauma', country: 'Finland',
+    coords: [21.511, 61.128], kind: 'unesco', heritage: 'cultural', unescoId: 582, when: '', photo: '' },
+  { id: 'lyon', city: 'Lyon', name: 'Historic Site of Lyons', country: 'France',
+    coords: [4.827, 45.762], kind: 'unesco', heritage: 'cultural', unescoId: 872, when: '', photo: '' },
+  { id: 'nice', city: 'Nice', name: 'Nice, Winter Resort Town of the Riviera', country: 'France',
+    coords: [7.266, 43.696], kind: 'unesco', heritage: 'cultural', unescoId: 1635, when: '', photo: '' },
+  { id: 'versailles', city: 'Versailles', name: 'Palace and Park of Versailles', country: 'France',
+    coords: [2.12, 48.805], kind: 'unesco', heritage: 'cultural', unescoId: 83, when: '', photo: '' },
+  { id: 'seine', city: 'Banks of the Seine', name: 'Paris, Banks of the Seine', country: 'France',
+    coords: [2.35, 48.853], kind: 'unesco', heritage: 'cultural', unescoId: 600, when: '', photo: '' },
+  { id: 'cologne', city: 'Cologne Cathedral', name: 'Cologne Cathedral', country: 'Germany',
+    coords: [6.958, 50.941], kind: 'unesco', heritage: 'cultural', unescoId: 292, when: '', photo: '' },
+  { id: 'luxembourg-city', city: 'Luxembourg City', name: 'City of Luxembourg: its Old Quarters and Fortifications', country: 'Luxembourg',
+    coords: [6.135, 49.611], kind: 'unesco', heritage: 'cultural', unescoId: 699, when: '', photo: '' },
+  { id: 'red-fort', city: 'Red Fort', name: 'Red Fort Complex', country: 'India',
+    coords: [77.241, 28.656], kind: 'unesco', heritage: 'cultural', unescoId: 231, when: '2025', photo: '' },
+  { id: 'jantar-mantar', city: 'Jantar Mantar', name: 'The Jantar Mantar, Jaipur', country: 'India',
+    coords: [75.825, 26.925], kind: 'unesco', heritage: 'cultural', unescoId: 1338, when: '2025', photo: '' },
+  { id: 'erbil-citadel', city: 'Erbil Citadel', name: 'Erbil Citadel', country: 'Iraq',
+    coords: [44.009, 36.191], kind: 'unesco', heritage: 'cultural', unescoId: 1437, when: '2014', photo: '' },
+  { id: 'itsukushima', city: 'Itsukushima Shrine', name: 'Itsukushima Shinto Shrine', country: 'Japan',
+    coords: [132.32, 34.296], kind: 'unesco', heritage: 'cultural', unescoId: 776, when: '2012', photo: '' },
+  { id: 'fort-jesus', city: 'Fort Jesus', name: 'Fort Jesus, Mombasa', country: 'Kenya',
+    coords: [39.68, -4.063], kind: 'unesco', heritage: 'cultural', unescoId: 1295, when: '2023', photo: '' },
+  { id: 'kaya-forests', city: 'Kaya forests', name: 'Sacred Mijikenda Kaya Forests', country: 'Kenya',
+    coords: [39.55, -4.39], kind: 'unesco', heritage: 'cultural', unescoId: 1231, when: '2023', photo: '' },
+  { id: 'geirangerfjord', city: 'Geirangerfjord', name: 'West Norwegian Fjords – Geirangerfjord and Nærøyfjord', country: 'Norway',
+    coords: [7.09, 62.1], kind: 'unesco', heritage: 'natural', unescoId: 1195, when: '', photo: '' },
+  { id: 'auschwitz', city: 'Auschwitz-Birkenau', name: 'Auschwitz Birkenau German Nazi Concentration and Extermination Camp (1940-1945)', country: 'Poland',
+    coords: [19.178, 50.036], kind: 'unesco', heritage: 'cultural', unescoId: 31, when: '', photo: '' },
+  { id: 'sintra', city: 'Sintra', name: 'Cultural Landscape of Sintra', country: 'Portugal',
+    coords: [-9.391, 38.788], kind: 'unesco', heritage: 'cultural', unescoId: 723, when: '2023', photo: '' },
+  { id: 'jeronimos', city: 'Jerónimos Monastery', name: 'Monastery of the Hieronymites and Tower of Belém in Lisbon', country: 'Portugal',
+    coords: [-9.207, 38.698], kind: 'unesco', heritage: 'cultural', unescoId: 263, when: '2023', photo: '' },
+  { id: 'st-petersburg', city: 'St. Petersburg', name: 'Historic Centre of Saint Petersburg and Related Groups of Monuments', country: 'Russia',
+    coords: [30.316, 59.939], kind: 'unesco', heritage: 'cultural', unescoId: 540, when: '', photo: '' },
+  { id: 'san-marino-whs', city: 'San Marino and Mount Titano', name: 'San Marino Historic Centre and Mount Titano', country: 'San Marino',
+    coords: [12.447, 43.936], kind: 'unesco', heritage: 'cultural', unescoId: 1245, when: '2019', photo: '' },
+  { id: 'grimeton', city: 'Grimeton', name: 'Grimeton Radio Station, Varberg', country: 'Sweden',
+    coords: [12.395, 57.107], kind: 'unesco', heritage: 'cultural', unescoId: 1134, when: '', photo: '' },
+  { id: 'visby', city: 'Visby', name: 'Hanseatic Town of Visby', country: 'Sweden',
+    coords: [18.296, 57.641], kind: 'unesco', heritage: 'cultural', unescoId: 731, when: '', photo: '' },
+  { id: 'lviv-whs', city: 'Lviv old town', name: 'Lviv – the Ensemble of the Historic Centre', country: 'Ukraine',
+    coords: [24.032, 49.842], kind: 'unesco', heritage: 'cultural', unescoId: 865, when: '2015', photo: '' },
+  { id: 'greenwich', city: 'Greenwich', name: 'Maritime Greenwich', country: 'United Kingdom',
+    coords: [-0.008, 51.483], kind: 'unesco', heritage: 'cultural', unescoId: 795, when: '', photo: '' },
+  { id: 'grand-canyon', city: 'Grand Canyon', name: 'Grand Canyon National Park', country: 'United States of America',
+    coords: [-112.113, 36.107], kind: 'unesco', heritage: 'natural', unescoId: 75, when: '', photo: '' },
+  { id: 'redwood', city: 'Redwood', name: 'Redwood National and State Parks', country: 'United States of America',
+    coords: [-124.005, 41.213], kind: 'unesco', heritage: 'natural', unescoId: 134, when: '', photo: '' },
+  { id: 'statue-of-liberty', city: 'Statue of Liberty', name: 'Statue of Liberty', country: 'United States of America',
+    coords: [-74.045, 40.689], kind: 'unesco', heritage: 'cultural', unescoId: 307, when: '2008', photo: '' },
+];
+
+// Whole countries to colour, per category. Names must match the map data (e.g. "Czechia", "Bosnia and Herz.").
+export const workCountries = ['Sweden', 'Luxembourg', 'Italy', 'Spain', 'Taiwan'];
+
+// US states and Canadian provinces where I've worked or studied (coloured yellow).
+export const workRegions = ['Ontario'];
+
+export const visitedCountries = [
+  'Morocco', 'Belgium', 'Netherlands', 'Norway', 'Denmark', 'Latvia', 'Lithuania',
+  'Czechia', 'Slovenia', 'Austria', 'Switzerland', 'Germany', 'France', 'Poland',
+  'Croatia', 'Serbia', 'Hungary', 'Russia', 'Cyprus', 'Portugal', 'Ireland',
+  'Finland', 'Egypt', 'Greece', 'Ukraine', 'United Kingdom', 'Spain', 'Luxembourg', 'Sweden', 'Iraq', 'Italy',
+];
+
+// US states and Canadian provinces visited without a pin of their own (coloured green).
+export const visitedRegions = [
+  'Utah', 'Arizona', 'Virginia', 'Pennsylvania', 'Maryland', 'West Virginia',
 ];
 
 export const kinds = {
-  lived: 'Lived, studied or worked',
-  work: 'Work trips',
+  lived: 'Lived',
+  work: 'Worked or studied',
+  visited: 'Visited',
+  mountain: 'Mountains',
+  football: 'Football',
+  unesco: 'World Heritage',
 };
+
+export const heritageTypes = {
+  cultural: 'Cultural heritage',
+  natural: 'Natural heritage',
+  mixed: 'Cultural and natural heritage',
+};
+
+// Map views. [[west, south], [east, north]] in degrees.
+// When you pick a place outside the current view, the map jumps to the first view that contains it.
+export const views = [
+  { id: 'world', label: 'World' },
+  { id: 'europe', label: 'Europe', bounds: [[-11, 35], [32, 69]] },
+  { id: 'north-america', label: 'North America', bounds: [[-128, 24], [-66, 54]] },
+  { id: 'asia', label: 'Asia', bounds: [[40, 18], [142, 44]] },
+  { id: 'africa', label: 'Africa', bounds: [[-18, -8], [45, 37]] },
+];
