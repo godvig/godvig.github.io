@@ -228,11 +228,14 @@ export const places = [
 // Whole countries to colour, per category. Names must match the map data (e.g. "Czechia", "Bosnia and Herz.").
 export const workCountries = ['Sweden', 'Luxembourg', 'Italy', 'Spain', 'Taiwan'];
 
+// US states and Canadian provinces where I've worked or studied (coloured yellow).
+export const workRegions = ['Ontario'];
+
 export const visitedCountries = [
   'Morocco', 'Belgium', 'Netherlands', 'Norway', 'Denmark', 'Latvia', 'Lithuania',
   'Czechia', 'Slovenia', 'Austria', 'Switzerland', 'Germany', 'France', 'Poland',
   'Croatia', 'Serbia', 'Hungary', 'Russia', 'Cyprus', 'Portugal', 'Ireland',
-  'Finland', 'Egypt', 'Greece', 'Ukraine', 'United Kingdom', 'Spain', 'Luxembourg', 'Sweden', 'Iraq',
+  'Finland', 'Egypt', 'Greece', 'Ukraine', 'United Kingdom', 'Spain', 'Luxembourg', 'Sweden', 'Iraq', 'Italy',
 ];
 
 // US states and Canadian provinces visited without a pin of their own (coloured green).

@@ -285,9 +285,9 @@ footer { background: var(--grey); }
   .map-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 700px) {
-  .skyline { justify-content: flex-start; height: 180px; }
-  .location { width: 140px; height: 180px; }
-  .silhouette { transform: scale(0.7); transform-origin: 50% 100%; }
+  /* Shrink each skyline tile as a whole so the silhouettes keep their proportions */
+  .skyline { justify-content: flex-start; height: 155px; padding-left: 70px; }
+  .location { zoom: 0.62; }
   .rowsection { min-height: 0; }
   .hello { padding-top: 70px; }
   .hello h1 { font-size: 48px; }
@@ -343,3 +343,6 @@ footer { background: var(--grey); }
 
 .place-list.unesco button { color: #e6e6f0; border-color: #8f8fb0; }
 .place-list.unesco button.active { background: #e6e6f0; color: var(--navy-deep); }
+
+/* Invisible, larger tap target around each map symbol */
+.map-frame .marker circle.hit { fill: transparent; stroke: none; }

@@ -7,7 +7,7 @@ import 'd3-transition';
 import world from '../data/world.json';
 import usAtlas from '../data/us-states.json';
 import canadaAtlas from '../data/canada-provinces.json';
-import { places, kinds, views, workCountries, visitedCountries, visitedRegions, heritageTypes } from '../data/places.js';
+import { places, kinds, views, workCountries, workRegions, visitedCountries, visitedRegions, heritageTypes } from '../data/places.js';
 import { ranges } from '../data/ranges.js';
 
 const W = 960, H = 500;
@@ -140,6 +140,8 @@ export default function TravelMap() {
   const svgRef = useRef(null);
   const zoomRef = useRef(null);
   const [t, setT] = useState(zoomIdentity);
+  // On small screens the whole map is shrunk; scale symbols back up so they stay easy to tap
+  const [ms, setMs] = useState(1);
   const [selected, setSelected] = useState('gothenburg');
   const [viewId, setViewId] = useState('world');
   const [show, setShow] = useState({ lived: true, work: false, visited: false, mountain: false, football: false, unesco: false });
@@ -156,7 +158,12 @@ export default function TravelMap() {
       });
     zoomRef.current = z;
     select(svgRef.current).call(z);
-    return () => select(svgRef.current).on('.zoom', null);
+    const ro = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      if (w) setMs(Math.min(3, Math.max(1, W / w)));
+    });
+    ro.observe(svgRef.current);
+    return () => { ro.disconnect(); select(svgRef.current).on('.zoom', null); };
   }, []);
 
   const animateTo = (transform, ms = 750) =>
@@ -202,7 +209,10 @@ export default function TravelMap() {
       if (!FILL_RANK[kind]) return;
       if (!obj[key] || FILL_RANK[kind] > FILL_RANK[obj[key]]) obj[key] = kind;
     };
-    if (show.work) workCountries.forEach(c => mark(byCountry, c, 'work'));
+    if (show.work) {
+      workCountries.forEach(c => mark(byCountry, c, 'work'));
+      workRegions.forEach(r => mark(byRegion, r, 'work'));
+    }
     if (show.visited) {
       visitedCountries.forEach(c => mark(byCountry, c, 'visited'));
       visitedRegions.forEach(r => mark(byRegion, r, 'visited'));
@@ -287,7 +297,7 @@ export default function TravelMap() {
                   <g
                     key={p.id}
                     className={`marker ${p.kind}${isSel ? ' selected' : ''}`}
-                    transform={`translate(${x},${y})`}
+                    transform={`translate(${x},${y}) scale(${ms})`}
                     tabIndex={0}
                     role="button"
                     aria-label={`${p.city}, ${p.country}`}
@@ -296,6 +306,7 @@ export default function TravelMap() {
                     onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), select_(p.id))}
                   >
                     <title>{p.city}</title>
+                    <circle r="13" className="hit" />
                     <Symbol kind={p.kind} heritage={p.heritage} selected={isSel} />
                     {label && <text x={isSel ? 17 : 11} y="4">{p.city}</text>}
                   </g>
