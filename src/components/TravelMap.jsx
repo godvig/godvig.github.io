@@ -241,7 +241,7 @@ export default function TravelMap() {
     const on = prev[kind].markers || prev[kind].area;
     return { ...prev, [kind]: on ? { markers: false, area: false } : startsWith[kind] };
   });
-  const activeLayers = Object.values(show).filter(v => v.markers || v.area).length;
+  const activeMarkers = Object.entries(show).filter(([k, v]) => k !== 'football' && v.markers).length;
   const toggle = (kind, part) => setShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
 
   const current = places.find(p => p.id === selected);
@@ -259,22 +259,26 @@ export default function TravelMap() {
           <button key={v.id} className={v.id === viewId ? 'active' : ''} onClick={() => goToView(v)}>{v.label}</button>
         ))}
       </div>
-      <div className="map-controls layers-toggle">
-        <button className={layersOpen ? 'active' : ''} aria-expanded={layersOpen} onClick={() => setLayersOpen(o => !o)}>
-          Layers <span className="count">{activeLayers}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
+      <div className="map-controls filters" role="group" aria-label="Show on map">
+        {Object.entries(kinds).map(([k, label]) => (
+          <button key={k} className={`filter-chip ${k}${show[k].markers || show[k].area ? ' on' : ''}`} aria-pressed={show[k].markers || show[k].area} onClick={() => toggleKind(k)}>
+            <Legend kind={k} />{label}
+          </button>
+        ))}
+        <button className={`layers-btn${layersOpen ? ' active' : ''}`} aria-expanded={layersOpen} onClick={() => setLayersOpen(o => !o)}>
+          Layers <span className="count">{activeMarkers}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
         </button>
       </div>
-      {layersOpen && <div className="map-controls filters" role="group" aria-label="Show on map">
-        {Object.entries(kinds).map(([k, label]) => (
-          <div key={k} className={`filter ${k}${show[k].markers || show[k].area ? ' on' : ''}`}>
-            <button className="filter-name" aria-pressed={show[k].markers || show[k].area} onClick={() => toggleKind(k)}><Legend kind={k} />{label}</button>
-            <button className={show[k].markers ? 'on' : ''} aria-pressed={show[k].markers} onClick={() => toggle(k, 'markers')}>Markers</button>
-            {areaLabels[k] && (
-              <button className={show[k].area ? 'on' : ''} aria-pressed={show[k].area} onClick={() => toggle(k, 'area')}>{areaLabels[k]}</button>
-            )}
-          </div>
-        ))}
-      </div>}
+      {layersOpen && (
+        <div className="map-controls layers-panel" role="group" aria-label="Markers on map">
+          <span className="layers-title">Markers</span>
+          {Object.entries(kinds).filter(([k]) => k !== 'football').map(([k, label]) => (
+            <button key={k} className={`filter-chip small ${k}${show[k].markers ? ' on' : ''}`} aria-pressed={show[k].markers} onClick={() => toggle(k, 'markers')}>
+              <Legend kind={k} />{label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="map-layout">
         <div className="map-frame">

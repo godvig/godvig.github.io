@@ -244,15 +244,16 @@ a:hover { color: var(--orange); }
 .swatch.work { background: var(--gold); }
 .swatch.visited { background: var(--green); }
 
-.map-controls .filter { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.35rem 0.25rem 0.75rem; border: 1px solid #55557a; border-radius: 999px; color: #8a8aa8; }
-.map-controls .filter.on { border-color: #fff; color: #fff; }
-.map-controls .filter button.filter-name { display: inline-flex; align-items: center; gap: 0.45rem; margin-right: 0.2rem; padding: 0; border: 0; background: none; font-size: inherit; color: inherit; }
-.map-controls .filter button.filter-name.on { background: none; }
-.layers-toggle { margin-top: -0.75rem; }
-.layers-toggle .count { margin: 0 0.2rem; padding: 0 0.45rem; border-radius: 999px; background: var(--gold); color: #0b0b2e; font-size: 0.75rem; font-weight: 700; }
-.map-controls.filters { margin-top: 0; }
-.map-controls .filter button { padding: 0.2rem 0.65rem; font-size: 0.8rem; border-radius: 999px; border: 1px solid #55557a; background: transparent; color: #8a8aa8; cursor: pointer; text-decoration: none; }
-.map-controls .filter button.on { background: var(--gold); border-color: var(--gold); color: #0b0b2e; }
+.map-controls .filter-chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.3rem 0.85rem; font-size: 0.95rem; border: 1px solid #55557a; border-radius: 999px; background: transparent; color: #8a8aa8; cursor: pointer; text-decoration: none; }
+.map-controls .filter-chip.on { border-color: #fff; color: #fff; background: transparent; }
+.map-controls .filter-chip.small { font-size: 0.8rem; padding: 0.2rem 0.65rem; }
+.map-controls .filter-chip.small.on { background: rgba(255,255,255,0.14); border-color: #fff; color: #fff; }
+.map-controls .layers-btn { padding: 0.3rem 0.85rem; font-size: 0.95rem; }
+.layers-btn .count { margin: 0 0.2rem; padding: 0 0.45rem; border-radius: 999px; background: var(--gold); color: #0b0b2e; font-size: 0.75rem; font-weight: 700; }
+.layers-btn.active .count { background: #0b0b2e; color: var(--gold); }
+.layers-title { align-self: center; color: #c9c9da; font-size: 0.85rem; }
+.map-controls.filters { margin-top: -0.75rem; }
+.map-controls.layers-panel { margin-top: -0.75rem; }
 
 .place-group h4 { display: flex; align-items: center; gap: 0.5rem; margin: 1.4rem 0 0.6rem; font-size: 0.95rem; color: #c9c9da; font-weight: 600; }
 .place-list.lived button { color: #c7aef0; border-color: var(--purple); }
@@ -271,7 +272,7 @@ a:hover { color: var(--orange); }
 .profile-pic { display: block; width: 90px; height: 90px; border-radius: 50%; background-repeat: no-repeat; transition: transform 0.2s; }
 .contact-box:hover .profile-pic { transform: scale(1.06); }
 .linkedin-pic     { background-image: url(/img/pictures/linkedin.jpg); background-size: cover; background-position: center 15%; border: 3px solid rgb(0, 123, 182); }
-.github-pic       { background-image: url(https://github.com/godvig.png?size=180); background-size: 92%; background-position: 50% 100%; background-repeat: no-repeat; background-color: #fff; border: 4px solid #000; box-sizing: border-box; }
+.github-pic       { background-image: url(https://github.com/godvig.png?size=180); background-size: 104%; background-position: center calc(100% + 9px); background-repeat: no-repeat; background-color: #fff; border: 4px solid #000; box-sizing: border-box; }
 .couchsurfing-pic { background-image: url(/img/pictures/couch.jpg);    background-size: 95px; background-position: -5px -10px; border: 3px solid rgb(224, 99, 70); }
 .profile-logo { display: block; width: 90px; margin-top: 6px; background-repeat: no-repeat; background-size: 90px; }
 .github-logo { background-image: url(/img/logos/github-logo.png); height: 24.2px; }

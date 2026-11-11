@@ -19,7 +19,13 @@ const projects = [
   },
   {
     name: 'Doppelgambit',
+    code: 'https://github.com/godvig/doppelgambit',
     text: 'A chess opening trainer with spaced repetition, plus a sparring partner that plays like a specific person: yourself or your next opponent. Built on Stockfish and a human-like engine.',
+    status: 'In progress',
+  },
+  {
+    name: 'Size on disk for SteamOS',
+    text: 'A Decky Loader plugin that shows how much space each game takes, mods included, right on the game page in Gaming Mode.',
     status: 'In progress',
   },
   {
