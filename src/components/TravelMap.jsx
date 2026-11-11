@@ -232,6 +232,16 @@ export default function TravelMap() {
     return { byCountry, byRegion };
   }, [show]);
 
+  const [layersOpen, setLayersOpen] = useState(false);
+  // Turning a category on from its name: Lived/Worked/Visited start with colour only (markers are opt-in);
+  // Mountains and World Heritage start with everything.
+  const startsWith = { lived: { markers: false, area: true }, work: { markers: false, area: true }, visited: { markers: false, area: true },
+    mountain: { markers: true, area: true }, unesco: { markers: true, area: true }, football: { markers: true, area: false } };
+  const toggleKind = kind => setShow(prev => {
+    const on = prev[kind].markers || prev[kind].area;
+    return { ...prev, [kind]: on ? { markers: false, area: false } : startsWith[kind] };
+  });
+  const activeLayers = Object.values(show).filter(v => v.markers || v.area).length;
   const toggle = (kind, part) => setShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
 
   const current = places.find(p => p.id === selected);
@@ -249,17 +259,22 @@ export default function TravelMap() {
           <button key={v.id} className={v.id === viewId ? 'active' : ''} onClick={() => goToView(v)}>{v.label}</button>
         ))}
       </div>
-      <div className="map-controls filters" role="group" aria-label="Show on map">
+      <div className="map-controls layers-toggle">
+        <button className={layersOpen ? 'active' : ''} aria-expanded={layersOpen} onClick={() => setLayersOpen(o => !o)}>
+          Layers <span className="count">{activeLayers}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
+        </button>
+      </div>
+      {layersOpen && <div className="map-controls filters" role="group" aria-label="Show on map">
         {Object.entries(kinds).map(([k, label]) => (
           <div key={k} className={`filter ${k}${show[k].markers || show[k].area ? ' on' : ''}`}>
-            <span className="filter-name"><Legend kind={k} />{label}</span>
+            <button className="filter-name" aria-pressed={show[k].markers || show[k].area} onClick={() => toggleKind(k)}><Legend kind={k} />{label}</button>
             <button className={show[k].markers ? 'on' : ''} aria-pressed={show[k].markers} onClick={() => toggle(k, 'markers')}>Markers</button>
             {areaLabels[k] && (
               <button className={show[k].area ? 'on' : ''} aria-pressed={show[k].area} onClick={() => toggle(k, 'area')}>{areaLabels[k]}</button>
             )}
           </div>
         ))}
-      </div>
+      </div>}
 
       <div className="map-layout">
         <div className="map-frame">
