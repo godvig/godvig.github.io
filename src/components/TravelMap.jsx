@@ -57,6 +57,7 @@ const toShape = r => {
   }
   return shape;
 };
+const areaLabels = { lived: 'Colour', work: 'Colour', visited: 'Colour', mountain: 'Ranges', unesco: 'Parks' };
 const rangeShapes = ranges.map(toShape);
 const parkShapes = parks.map(toShape);
 
@@ -146,9 +147,8 @@ export default function TravelMap() {
   const [ms, setMs] = useState(1);
   const [selected, setSelected] = useState('gothenburg');
   const [viewId, setViewId] = useState('europe');
-  // Layers: what is drawn, independent of which categories are picked below
-  const [layers, setLayers] = useState({ countries: true, markers: true, ranges: true, parks: true });
-  const [show, setShow] = useState({ lived: true, work: false, visited: false, mountain: false, football: false, unesco: false });
+  // Per category: are its markers drawn, and is its area layer drawn (country colours / mountain ranges / national parks)?
+  const [show, setShow] = useState(() => Object.fromEntries(Object.keys(kinds).map(k => [k, { markers: k === 'lived', area: k === 'lived' }])));
 
   // Set up zoom: scroll wheel, pinch, double-click and dragging with the hand cursor
   useEffect(() => {
@@ -204,8 +204,8 @@ export default function TravelMap() {
     if (!e.target.closest('.marker')) setSelected(null);
   };
 
-  const visible = places.filter(p => show[p.kind]);
-  const drawn = layers.markers ? visible : [];
+  const drawn = places.filter(p => show[p.kind].markers);
+  const coloured = places.filter(p => show[p.kind].area);
 
   // Colour countries, states and provinces: lived (purple) > work (yellow) > visited (green).
   // Mountains and football only show their symbol.
@@ -215,30 +215,22 @@ export default function TravelMap() {
       if (!FILL_RANK[kind]) return;
       if (!obj[key] || FILL_RANK[kind] > FILL_RANK[obj[key]]) obj[key] = kind;
     };
-    if (show.work) {
+    if (show.work.area) {
       workCountries.forEach(c => mark(byCountry, c, 'work'));
       workRegions.forEach(r => mark(byRegion, r, 'work'));
     }
-    if (show.visited) {
+    if (show.visited.area) {
       visitedCountries.forEach(c => mark(byCountry, c, 'visited'));
       visitedRegions.forEach(r => mark(byRegion, r, 'visited'));
     }
-    for (const p of visible) {
+    for (const p of coloured) {
       mark(byCountry, p.country, p.kind);
       if (regionOf[p.id]) mark(byRegion, regionOf[p.id], p.kind);
     }
     return { byCountry, byRegion };
   }, [show]);
 
-  const toggleLayer = key => setLayers(l => ({ ...l, [key]: !l[key] }));
-
-  const toggle = kind => {
-    const next = { ...show, [kind]: !show[kind] };
-    if (!Object.values(next).some(Boolean)) return; // keep at least one on
-    setShow(next);
-    const cur = places.find(p => p.id === selected);
-    if (cur && !next[cur.kind]) setSelected(places.find(p => next[p.kind]).id);
-  };
+  const toggle = (kind, part) => setShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
 
   const current = places.find(p => p.id === selected);
   const showLabels = t.k >= 3;
@@ -257,18 +249,13 @@ export default function TravelMap() {
       </div>
       <div className="map-controls filters" role="group" aria-label="Show on map">
         {Object.entries(kinds).map(([k, label]) => (
-          <button key={k} className={`filter ${k}${show[k] ? ' on' : ''}`} aria-pressed={show[k]} onClick={() => toggle(k)}>
-            <Legend kind={k} />{label}
-          </button>
-        ))}
-      </div>
-
-      <div className="map-controls layers" role="group" aria-label="Map layers">
-        <span className="layers-label">Layers</span>
-        {[['countries', 'Country colours'], ['markers', 'Markers'], ['ranges', 'Mountain ranges'], ['parks', 'National parks']].map(([k, label]) => (
-          <button key={k} className={`layer ${k}${layers[k] ? ' on' : ''}`} aria-pressed={layers[k]} onClick={() => toggleLayer(k)}>
-            <span className="switch" aria-hidden="true" />{label}
-          </button>
+          <div key={k} className={`filter ${k}${show[k].markers || show[k].area ? ' on' : ''}`}>
+            <span className="filter-name"><Legend kind={k} />{label}</span>
+            <button className={show[k].markers ? 'on' : ''} aria-pressed={show[k].markers} onClick={() => toggle(k, 'markers')}>Markers</button>
+            {areaLabels[k] && (
+              <button className={show[k].area ? 'on' : ''} aria-pressed={show[k].area} onClick={() => toggle(k, 'area')}>{areaLabels[k]}</button>
+            )}
+          </div>
         ))}
       </div>
 
@@ -291,22 +278,22 @@ export default function TravelMap() {
             <g transform={t.toString()}>
               {countries.map(c => (
                 <path key={c.id ?? c.properties.name} d={path(c)} vectorEffect="non-scaling-stroke"
-                  className={`country ${layers.countries ? fill.byCountry[c.properties.name] || '' : ''}`}>
+                  className={`country ${fill.byCountry[c.properties.name] || ''}`}>
                   <title>{c.properties.name}</title>
                 </path>
               ))}
               {regions.map(r => (
                 <path key={r.country + r.properties.name} d={path(r)} vectorEffect="non-scaling-stroke"
-                  className={`country region ${layers.countries ? fill.byRegion[r.properties.name] || '' : ''}`}>
+                  className={`country region ${fill.byRegion[r.properties.name] || ''}`}>
                   <title>{r.properties.name}</title>
                 </path>
               ))}
-              {layers.ranges && rangeShapes.map(r => (
+              {show.mountain.area && rangeShapes.map(r => (
                 <path key={r.properties.name} d={path(r)} className="range" fill="url(#range-hatch)" vectorEffect="non-scaling-stroke">
                   <title>{r.properties.name}</title>
                 </path>
               ))}
-              {layers.parks && parkShapes.map(r => (
+              {show.unesco.area && parkShapes.map(r => (
                 <path key={r.properties.name} d={path(r)} className="range park" fill="url(#park-hatch)" vectorEffect="non-scaling-stroke">
                   <title>{r.properties.name}</title>
                 </path>
@@ -366,7 +353,7 @@ export default function TravelMap() {
               )}
             </>
           )}
-          {Object.entries(kinds).filter(([k]) => show[k]).map(([k, label]) => (
+          {Object.entries(kinds).filter(([k]) => show[k].markers).map(([k, label]) => (
             <div key={k} className="place-group">
               <h4><Legend kind={k} />{label}</h4>
               <ul className={`place-list ${k}`}>
