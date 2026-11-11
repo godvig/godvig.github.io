@@ -35,7 +35,7 @@ const education = [
   ['Exchanges', 'Queen\'s University (Canada), Politecnico di Milano (Italy)'],
 ];
 
-const languages = 'Swedish (native), English (fluent, IELTS 8.5), German, Danish and Norwegian, some French and Italian.';
+const languages = 'Swedish (native), English (fluent, IELTS 8.5), German, Danish and Norwegian, some French, Italian and Spanish.';
 
 export default function Experience() {
   return (

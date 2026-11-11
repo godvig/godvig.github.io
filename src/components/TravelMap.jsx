@@ -8,7 +8,7 @@ import world from '../data/world.json';
 import usAtlas from '../data/us-states.json';
 import canadaAtlas from '../data/canada-provinces.json';
 import { places, kinds, views, workCountries, workRegions, visitedCountries, visitedRegions, heritageTypes } from '../data/places.js';
-import { ranges } from '../data/ranges.js';
+import { ranges, parks } from '../data/ranges.js';
 
 const W = 960, H = 500;
 const USA = 'United States of America';
@@ -48,7 +48,7 @@ const regions = [
 ];
 
 // d3 wants polygon rings clockwise; flip any that came out the other way
-const rangeShapes = ranges.map(r => {
+const toShape = r => {
   let ring = [...r.points, r.points[0]];
   let shape = { type: 'Feature', properties: { name: r.name }, geometry: { type: 'Polygon', coordinates: [ring] } };
   if (geoArea(shape) > 2 * Math.PI) {
@@ -56,7 +56,11 @@ const rangeShapes = ranges.map(r => {
     shape = { ...shape, geometry: { type: 'Polygon', coordinates: [ring] } };
   }
   return shape;
-});
+};
+const LIST_LIMIT = 12; // longer lists are collapsed behind a "Show all" button
+const areaLabels = { lived: 'Colour', work: 'Colour', visited: 'Colour', mountain: 'Ranges', unesco: 'Parks' };
+const rangeShapes = ranges.map(toShape);
+const parkShapes = parks.map(toShape);
 
 // Which US state / Canadian province each place sits in
 const regionOf = {};
@@ -143,8 +147,10 @@ export default function TravelMap() {
   // On small screens the whole map is shrunk; scale symbols back up so they stay easy to tap
   const [ms, setMs] = useState(1);
   const [selected, setSelected] = useState('gothenburg');
-  const [viewId, setViewId] = useState('world');
-  const [show, setShow] = useState({ lived: true, work: false, visited: false, mountain: false, football: false, unesco: false });
+  const [expanded, setExpanded] = useState({});
+  const [viewId, setViewId] = useState('europe');
+  // Per category: are its markers drawn, and is its area layer drawn (country colours / mountain ranges / national parks)?
+  const [show, setShow] = useState(() => Object.fromEntries(Object.keys(kinds).map(k => [k, { markers: k === 'lived', area: k === 'lived' }])));
 
   // Set up zoom: scroll wheel, pinch, double-click and dragging with the hand cursor
   useEffect(() => {
@@ -158,6 +164,9 @@ export default function TravelMap() {
       });
     zoomRef.current = z;
     select(svgRef.current).call(z);
+    // Start zoomed in on Europe
+    const europe = views.find(v => v.id === 'europe');
+    if (europe && europe.bounds) select(svgRef.current).call(z.transform, fitTransform(europe.bounds));
     const ro = new ResizeObserver(([entry]) => {
       const w = entry.contentRect.width;
       if (w) setMs(Math.min(3, Math.max(1, W / w)));
@@ -197,7 +206,8 @@ export default function TravelMap() {
     if (!e.target.closest('.marker')) setSelected(null);
   };
 
-  const visible = places.filter(p => show[p.kind]);
+  const drawn = places.filter(p => show[p.kind].markers);
+  const coloured = places.filter(p => show[p.kind].area);
 
   // Colour countries, states and provinces: lived (purple) > work (yellow) > visited (green).
   // Mountains and football only show their symbol.
@@ -207,32 +217,32 @@ export default function TravelMap() {
       if (!FILL_RANK[kind]) return;
       if (!obj[key] || FILL_RANK[kind] > FILL_RANK[obj[key]]) obj[key] = kind;
     };
-    if (show.work) {
+    if (show.work.area) {
       workCountries.forEach(c => mark(byCountry, c, 'work'));
       workRegions.forEach(r => mark(byRegion, r, 'work'));
     }
-    if (show.visited) {
+    if (show.visited.area) {
       visitedCountries.forEach(c => mark(byCountry, c, 'visited'));
       visitedRegions.forEach(r => mark(byRegion, r, 'visited'));
     }
-    for (const p of visible) {
+    for (const p of coloured) {
       mark(byCountry, p.country, p.kind);
       if (regionOf[p.id]) mark(byRegion, regionOf[p.id], p.kind);
     }
     return { byCountry, byRegion };
   }, [show]);
 
-  const toggle = kind => {
-    const next = { ...show, [kind]: !show[kind] };
-    if (!Object.values(next).some(Boolean)) return; // keep at least one on
-    setShow(next);
-    const cur = places.find(p => p.id === selected);
-    if (cur && !next[cur.kind]) setSelected(places.find(p => next[p.kind]).id);
-  };
+  const [layersOpen, setLayersOpen] = useState(false);
+  // The top chips switch a category's main layer: colour for Lived/Worked/Visited, symbols for the rest.
+  // Extra layers (markers for the three colour categories, ranges and parks) live under Layers.
+  const mainPart = { lived: 'area', work: 'area', visited: 'area', mountain: 'markers', football: 'markers', unesco: 'markers' };
+  const toggleKind = kind => toggle(kind, mainPart[kind]);
+  const activeExtras = ['lived', 'work', 'visited', 'football'].filter(k => show[k].markers).length + (show.mountain.area ? 1 : 0) + (show.unesco.area ? 1 : 0);
+  const toggle = (kind, part) => setShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
 
   const current = places.find(p => p.id === selected);
   const showLabels = t.k >= 3;
-  const ordered = [...visible.filter(p => p.id !== selected), ...visible.filter(p => p.id === selected)];
+  const ordered = [...drawn.filter(p => p.id !== selected), ...drawn.filter(p => p.id === selected)];
   const hatch = 6 / t.k;
 
   return (
@@ -246,12 +256,34 @@ export default function TravelMap() {
         ))}
       </div>
       <div className="map-controls filters" role="group" aria-label="Show on map">
-        {Object.entries(kinds).map(([k, label]) => (
-          <button key={k} className={`filter ${k}${show[k] ? ' on' : ''}`} aria-pressed={show[k]} onClick={() => toggle(k)}>
-            <Legend kind={k} />{label}
-          </button>
-        ))}
+        {Object.entries(kinds).filter(([k]) => k !== 'football').map(([k, label]) => {
+          const on = show[k][mainPart[k]];
+          return (
+            <button key={k} className={`filter-chip ${k}${on ? ' on' : ''}`} aria-pressed={on} onClick={() => toggleKind(k)}>
+              <Legend kind={k} />{label}
+            </button>
+          );
+        })}
+        <button className={`layers-btn${layersOpen ? ' active' : ''}`} aria-expanded={layersOpen} onClick={() => setLayersOpen(o => !o)}>
+          Layers <span className="count">{activeExtras}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
+        </button>
       </div>
+      {layersOpen && (
+        <div className="map-controls layers-panel" role="group" aria-label="More layers">
+          <span className="layers-title">Markers</span>
+          {['lived', 'work', 'visited', 'football'].map(k => (
+            <button key={k} className={`filter-chip small ${k}${show[k].markers ? ' on' : ''}`} aria-pressed={show[k].markers} onClick={() => toggle(k, 'markers')}>
+              <Legend kind={k} />{kinds[k]}
+            </button>
+          ))}
+          <span className="layers-title">Areas</span>
+          {[['mountain', 'Mountain ranges'], ['unesco', 'Parks']].map(([k, label]) => (
+            <button key={k} className={`filter-chip small ${k}${show[k].area ? ' on' : ''}`} aria-pressed={show[k].area} onClick={() => toggle(k, 'area')}>
+              <Legend kind={k} />{label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="map-layout">
         <div className="map-frame">
@@ -263,6 +295,9 @@ export default function TravelMap() {
             <defs>
               <pattern id="range-hatch" patternUnits="userSpaceOnUse" width={hatch} height={hatch} patternTransform="rotate(45)">
                 <line x1="0" y1="0" x2="0" y2={hatch} className="hatch-line" strokeWidth={1.6 / t.k} />
+              </pattern>
+              <pattern id="park-hatch" patternUnits="userSpaceOnUse" width={hatch} height={hatch} patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2={hatch} className="hatch-line park" strokeWidth={1.8 / t.k} />
               </pattern>
             </defs>
             <rect width={W} height={H} className="ocean" />
@@ -279,8 +314,13 @@ export default function TravelMap() {
                   <title>{r.properties.name}</title>
                 </path>
               ))}
-              {show.mountain && rangeShapes.map(r => (
+              {show.mountain.area && rangeShapes.map(r => (
                 <path key={r.properties.name} d={path(r)} className="range" fill="url(#range-hatch)" vectorEffect="non-scaling-stroke">
+                  <title>{r.properties.name}</title>
+                </path>
+              ))}
+              {show.unesco.area && parkShapes.map(r => (
+                <path key={r.properties.name} d={path(r)} className="range park" fill="url(#park-hatch)" vectorEffect="non-scaling-stroke">
                   <title>{r.properties.name}</title>
                 </path>
               ))}
@@ -339,20 +379,36 @@ export default function TravelMap() {
               )}
             </>
           )}
-          {Object.entries(kinds).filter(([k]) => show[k]).map(([k, label]) => (
-            <div key={k} className="place-group">
-              <h4><Legend kind={k} />{label}</h4>
-              <ul className={`place-list ${k}`}>
-                {places.filter(p => p.kind === k)
-                  .sort((a, b) => (k === 'unesco' ? a.city.localeCompare(b.city) : 0))
-                  .map(p => (
-                  <li key={p.id}>
-                    <button className={p.id === selected ? 'active' : ''} onClick={() => select_(p.id)}>{p.city}</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {Object.entries(kinds).filter(([k]) => show[k].markers).map(([k, label]) => {
+            const all = places.filter(p => p.kind === k)
+              .sort((x, y) => (k === 'unesco' ? x.city.localeCompare(y.city) : 0));
+            const open = expanded[k];
+            let list = all;
+            if (!open && all.length > LIST_LIMIT) {
+              list = all.slice(0, LIST_LIMIT);
+              const sel = all.find(p => p.id === selected);
+              if (sel && !list.includes(sel)) list = [...list, sel]; // keep the selected place visible
+            }
+            return (
+              <div key={k} className="place-group">
+                <h4><Legend kind={k} />{label} <span className="count">{all.length}</span></h4>
+                <ul className={`place-list ${k}`}>
+                  {list.map(p => (
+                    <li key={p.id}>
+                      <button className={p.id === selected ? 'active' : ''} onClick={() => select_(p.id)}>{p.city}</button>
+                    </li>
+                  ))}
+                  {all.length > LIST_LIMIT && (
+                    <li>
+                      <button className="more" onClick={() => setExpanded(e => ({ ...e, [k]: !e[k] }))}>
+                        {open ? 'Show fewer' : `Show all ${all.length}`}
+                      </button>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            );
+          })}
         </aside>
       </div>
     </section>

@@ -4,28 +4,30 @@ import React from 'react';
 // code: link to the source on GitHub
 const projects = [
   {
-    name: 'Släktarkivet',
-    app: 'https://godvig.github.io/slaktarkivet/',
-    code: 'https://github.com/godvig/slaktarkivet',
-    text: 'A genealogy tool: family tree, sources, timeline, map, photos and Excel import. Runs in the browser and saves to your own device, so try it with your own family.',
-    status: 'Live',
-  },
-  {
     name: 'Stock screener',
     app: 'https://godvig.github.io/market-dashboard/',
     code: 'https://github.com/godvig/market-dashboard',
-    text: 'Watchlists with scorecards, traffic lights and candlestick charts, pulling data from free market-data APIs. The demo runs on made-up prices; the real version runs locally with live data.',
+    text: 'Watchlists with scorecards, traffic lights and candlestick charts, pulling data from free market-data APIs. The online demo runs on made-up prices; the real version runs locally with live data.',
     status: 'Demo',
+  },
+  {
+    name: 'Shadowbook',
+    app: 'https://godvig.github.io/shadowbook/',
+    code: 'https://github.com/godvig/shadowbook',
+    text: 'Chess opponent prep: play the person, not the engine. Scout any chess.com or Lichess player and spar against a bot that opens like them and plays on at their rating, then see where your preparation ran out. Runs in the browser with no account, so try the built-in demo player.',
+    status: 'Live',
+  },
+  {
+    name: 'Kinsaga',
+    app: 'https://godvig.github.io/kinsaga/',
+    code: 'https://github.com/godvig/kinsaga',
+    text: 'Build your family history together: family tree, fan chart, sources, timeline and map, made for sharing and working on with relatives. Runs in the browser with no account, so try the example or your own family.',
+    status: 'Live',
   },
   {
     name: 'Size on disk for SteamOS',
     text: 'A Decky Loader plugin that shows how much space each game takes, mods included, right on the game page in Gaming Mode.',
-    status: 'In progress',
-  },
-  {
-    name: 'Meteora',
-    text: 'A Greek-themed town for Heroes of Might and Magic III: Horn of the Abyss, built with a friend to replace the Conflux.',
-    status: 'In progress',
+    status: 'Live',
   },
   {
     name: 'This website',
