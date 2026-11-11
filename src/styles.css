@@ -257,6 +257,8 @@ a:hover { color: var(--orange); }
 .place-list.visited button { color: var(--green); border-color: var(--green); }
 .place-list.visited button.active { background: var(--green); color: var(--navy-deep); }
 .place-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.place-group .count { margin-left: 0.3rem; font-size: 0.75rem; font-weight: 400; color: #8a8aa8; }
+.place-list button.more { border-style: dashed; color: #c9c9da; background: transparent; }
 .place-list button { padding: 0.15rem 0.7rem; font-size: 0.88rem; border-width: 1.5px; }
 
 /* ---------- Contact ---------- */

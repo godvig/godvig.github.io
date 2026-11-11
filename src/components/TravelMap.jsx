@@ -57,6 +57,7 @@ const toShape = r => {
   }
   return shape;
 };
+const LIST_LIMIT = 12; // longer lists are collapsed behind a "Show all" button
 const areaLabels = { lived: 'Colour', work: 'Colour', visited: 'Colour', mountain: 'Ranges', unesco: 'Parks' };
 const rangeShapes = ranges.map(toShape);
 const parkShapes = parks.map(toShape);
@@ -146,6 +147,7 @@ export default function TravelMap() {
   // On small screens the whole map is shrunk; scale symbols back up so they stay easy to tap
   const [ms, setMs] = useState(1);
   const [selected, setSelected] = useState('gothenburg');
+  const [expanded, setExpanded] = useState({});
   const [viewId, setViewId] = useState('europe');
   // Per category: are its markers drawn, and is its area layer drawn (country colours / mountain ranges / national parks)?
   const [show, setShow] = useState(() => Object.fromEntries(Object.keys(kinds).map(k => [k, { markers: k === 'lived', area: k === 'lived' }])));
@@ -353,20 +355,36 @@ export default function TravelMap() {
               )}
             </>
           )}
-          {Object.entries(kinds).filter(([k]) => show[k].markers).map(([k, label]) => (
-            <div key={k} className="place-group">
-              <h4><Legend kind={k} />{label}</h4>
-              <ul className={`place-list ${k}`}>
-                {places.filter(p => p.kind === k)
-                  .sort((a, b) => (k === 'unesco' ? a.city.localeCompare(b.city) : 0))
-                  .map(p => (
-                  <li key={p.id}>
-                    <button className={p.id === selected ? 'active' : ''} onClick={() => select_(p.id)}>{p.city}</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {Object.entries(kinds).filter(([k]) => show[k].markers).map(([k, label]) => {
+            const all = places.filter(p => p.kind === k)
+              .sort((x, y) => (k === 'unesco' ? x.city.localeCompare(y.city) : 0));
+            const open = expanded[k];
+            let list = all;
+            if (!open && all.length > LIST_LIMIT) {
+              list = all.slice(0, LIST_LIMIT);
+              const sel = all.find(p => p.id === selected);
+              if (sel && !list.includes(sel)) list = [...list, sel]; // keep the selected place visible
+            }
+            return (
+              <div key={k} className="place-group">
+                <h4><Legend kind={k} />{label} <span className="count">{all.length}</span></h4>
+                <ul className={`place-list ${k}`}>
+                  {list.map(p => (
+                    <li key={p.id}>
+                      <button className={p.id === selected ? 'active' : ''} onClick={() => select_(p.id)}>{p.city}</button>
+                    </li>
+                  ))}
+                  {all.length > LIST_LIMIT && (
+                    <li>
+                      <button className="more" onClick={() => setExpanded(e => ({ ...e, [k]: !e[k] }))}>
+                        {open ? 'Show fewer' : `Show all ${all.length}`}
+                      </button>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            );
+          })}
         </aside>
       </div>
     </section>
