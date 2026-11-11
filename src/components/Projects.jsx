@@ -23,11 +23,6 @@ const projects = [
     status: 'In progress',
   },
   {
-    name: 'Meteora',
-    text: 'A Greek-themed town for Heroes of Might and Magic III: Horn of the Abyss, built with a friend to replace the Conflux.',
-    status: 'In progress',
-  },
-  {
     name: 'This website',
     code: 'https://github.com/godvig/godvig.github.io',
     text: 'Built in 2019 to learn React, rebuilt in 2026 with Vite and an interactive map.',

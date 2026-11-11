@@ -8,7 +8,7 @@ import world from '../data/world.json';
 import usAtlas from '../data/us-states.json';
 import canadaAtlas from '../data/canada-provinces.json';
 import { places, kinds, views, workCountries, workRegions, visitedCountries, visitedRegions, heritageTypes } from '../data/places.js';
-import { ranges } from '../data/ranges.js';
+import { ranges, parks } from '../data/ranges.js';
 
 const W = 960, H = 500;
 const USA = 'United States of America';
@@ -48,7 +48,7 @@ const regions = [
 ];
 
 // d3 wants polygon rings clockwise; flip any that came out the other way
-const rangeShapes = ranges.map(r => {
+const toShape = r => {
   let ring = [...r.points, r.points[0]];
   let shape = { type: 'Feature', properties: { name: r.name }, geometry: { type: 'Polygon', coordinates: [ring] } };
   if (geoArea(shape) > 2 * Math.PI) {
@@ -56,7 +56,9 @@ const rangeShapes = ranges.map(r => {
     shape = { ...shape, geometry: { type: 'Polygon', coordinates: [ring] } };
   }
   return shape;
-});
+};
+const rangeShapes = ranges.map(toShape);
+const parkShapes = parks.map(toShape);
 
 // Which US state / Canadian province each place sits in
 const regionOf = {};
@@ -143,7 +145,9 @@ export default function TravelMap() {
   // On small screens the whole map is shrunk; scale symbols back up so they stay easy to tap
   const [ms, setMs] = useState(1);
   const [selected, setSelected] = useState('gothenburg');
-  const [viewId, setViewId] = useState('world');
+  const [viewId, setViewId] = useState('europe');
+  // Layers: what is drawn, independent of which categories are picked below
+  const [layers, setLayers] = useState({ countries: true, markers: true, ranges: false, parks: false });
   const [show, setShow] = useState({ lived: true, work: false, visited: false, mountain: false, football: false, unesco: false });
 
   // Set up zoom: scroll wheel, pinch, double-click and dragging with the hand cursor
@@ -158,6 +162,9 @@ export default function TravelMap() {
       });
     zoomRef.current = z;
     select(svgRef.current).call(z);
+    // Start zoomed in on Europe
+    const europe = views.find(v => v.id === 'europe');
+    if (europe && europe.bounds) select(svgRef.current).call(z.transform, fitTransform(europe.bounds));
     const ro = new ResizeObserver(([entry]) => {
       const w = entry.contentRect.width;
       if (w) setMs(Math.min(3, Math.max(1, W / w)));
@@ -198,6 +205,7 @@ export default function TravelMap() {
   };
 
   const visible = places.filter(p => show[p.kind]);
+  const drawn = layers.markers ? visible : [];
 
   // Colour countries, states and provinces: lived (purple) > work (yellow) > visited (green).
   // Mountains and football only show their symbol.
@@ -222,6 +230,8 @@ export default function TravelMap() {
     return { byCountry, byRegion };
   }, [show]);
 
+  const toggleLayer = key => setLayers(l => ({ ...l, [key]: !l[key] }));
+
   const toggle = kind => {
     const next = { ...show, [kind]: !show[kind] };
     if (!Object.values(next).some(Boolean)) return; // keep at least one on
@@ -232,7 +242,7 @@ export default function TravelMap() {
 
   const current = places.find(p => p.id === selected);
   const showLabels = t.k >= 3;
-  const ordered = [...visible.filter(p => p.id !== selected), ...visible.filter(p => p.id === selected)];
+  const ordered = [...drawn.filter(p => p.id !== selected), ...drawn.filter(p => p.id === selected)];
   const hatch = 6 / t.k;
 
   return (
@@ -253,6 +263,15 @@ export default function TravelMap() {
         ))}
       </div>
 
+      <div className="map-controls layers" role="group" aria-label="Map layers">
+        <span className="layers-label">Layers</span>
+        {[['countries', 'Country colours'], ['markers', 'Markers'], ['ranges', 'Mountain ranges'], ['parks', 'National parks']].map(([k, label]) => (
+          <button key={k} className={`layer ${k}${layers[k] ? ' on' : ''}`} aria-pressed={layers[k]} onClick={() => toggleLayer(k)}>
+            <span className="switch" aria-hidden="true" />{label}
+          </button>
+        ))}
+      </div>
+
       <div className="map-layout">
         <div className="map-frame">
           <div className="zoom-buttons">
@@ -264,23 +283,31 @@ export default function TravelMap() {
               <pattern id="range-hatch" patternUnits="userSpaceOnUse" width={hatch} height={hatch} patternTransform="rotate(45)">
                 <line x1="0" y1="0" x2="0" y2={hatch} className="hatch-line" strokeWidth={1.6 / t.k} />
               </pattern>
+              <pattern id="park-hatch" patternUnits="userSpaceOnUse" width={hatch} height={hatch} patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2={hatch} className="hatch-line park" strokeWidth={1.8 / t.k} />
+              </pattern>
             </defs>
             <rect width={W} height={H} className="ocean" />
             <g transform={t.toString()}>
               {countries.map(c => (
                 <path key={c.id ?? c.properties.name} d={path(c)} vectorEffect="non-scaling-stroke"
-                  className={`country ${fill.byCountry[c.properties.name] || ''}`}>
+                  className={`country ${layers.countries ? fill.byCountry[c.properties.name] || '' : ''}`}>
                   <title>{c.properties.name}</title>
                 </path>
               ))}
               {regions.map(r => (
                 <path key={r.country + r.properties.name} d={path(r)} vectorEffect="non-scaling-stroke"
-                  className={`country region ${fill.byRegion[r.properties.name] || ''}`}>
+                  className={`country region ${layers.countries ? fill.byRegion[r.properties.name] || '' : ''}`}>
                   <title>{r.properties.name}</title>
                 </path>
               ))}
-              {show.mountain && rangeShapes.map(r => (
+              {layers.ranges && rangeShapes.map(r => (
                 <path key={r.properties.name} d={path(r)} className="range" fill="url(#range-hatch)" vectorEffect="non-scaling-stroke">
+                  <title>{r.properties.name}</title>
+                </path>
+              ))}
+              {layers.parks && parkShapes.map(r => (
+                <path key={r.properties.name} d={path(r)} className="range park" fill="url(#park-hatch)" vectorEffect="non-scaling-stroke">
                   <title>{r.properties.name}</title>
                 </path>
               ))}

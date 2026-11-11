@@ -59,6 +59,7 @@ a:hover { color: var(--orange); }
 .London     { background-image: url(/img/silhouettes/stp.png);       background-size: 300px; background-position-y: 80px; }
 .Kingston   { background-image: url(/img/silhouettes/kingston.png);  background-size: 150px; background-position-y: 120px; }
 .Gothenburg { background-image: url(/img/silhouettes/poseidon.png);  background-size: 110px; background-position-y: 100px; }
+.Taipei     { background-image: url(/img/silhouettes/taipei.png);    background-size: 85px; background-position-y: 60px; }
 .Milano     { background-image: url(/img/silhouettes/milano.png);    background-size: 220px; background-position-y: 88px; }
 
 .location-name {
@@ -213,6 +214,8 @@ a:hover { color: var(--orange); }
 .zoom-buttons button:hover { border-color: var(--orange); color: var(--orange); }
 .range { stroke: #b9b9c9; stroke-width: 0.8; stroke-dasharray: 3 2; pointer-events: none; }
 .hatch-line { stroke: #c4c4d4; }
+.range.park { stroke: #3f9f55; }
+.hatch-line.park { stroke: #3fb55a; }
 .map-frame svg { width: 100%; height: auto; display: block; }
 .ocean { fill: rgb(14, 14, 70); }
 .country { fill: #2e3a6e; stroke: rgb(14, 14, 70); stroke-width: 0.5; }
@@ -242,6 +245,15 @@ a:hover { color: var(--orange); }
 .swatch.visited { background: var(--green); }
 
 .map-controls.filters { margin-top: -0.75rem; }
+.map-controls.layers { margin-top: -0.75rem; align-items: center; }
+.layers-label { color: #c9c9da; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-right: 0.25rem; }
+.map-controls .layer { display: inline-flex; align-items: center; gap: 0.55rem; color: #c9c9da; border-color: #55557a; }
+.map-controls .layer.on { background: transparent; color: #fff; border-color: #fff; }
+.layer .switch { position: relative; width: 26px; height: 14px; border-radius: 7px; background: #55557a; transition: background 0.2s; }
+.layer .switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: #fff; transition: transform 0.2s; }
+.layer.on .switch { background: var(--gold); }
+.layer.on .switch::after { transform: translateX(12px); }
+.layer.parks.on .switch { background: #3fb55a; }
 .map-controls .filter { display: inline-flex; align-items: center; gap: 0.5rem; color: #c9c9da; border-color: #55557a; }
 .map-controls .filter.on { background: transparent; color: #fff; border-color: #fff; }
 .map-controls .filter:not(.on) .swatch { opacity: 0.3; }
@@ -262,11 +274,12 @@ a:hover { color: var(--orange); }
 .profile-pic { display: block; width: 90px; height: 90px; border-radius: 50%; background-repeat: no-repeat; transition: transform 0.2s; }
 .contact-box:hover .profile-pic { transform: scale(1.06); }
 .linkedin-pic     { background-image: url(/img/pictures/linkedin.jpg); background-size: 90px; background-position: -2px -1px; border: 3px solid rgb(0, 123, 182); }
-.facebook-pic     { background-image: url(/img/pictures/facebook.jpg); background-size: 95px; background-position: -8px -4px; border: 3px solid rgb(60, 90, 153); }
+.github-pic       { background-image: url(https://github.com/godvig.png?size=180); background-size: cover; background-color: #fff; border: 4px solid #000; box-sizing: border-box; }
 .couchsurfing-pic { background-image: url(/img/pictures/couch.jpg);    background-size: 95px; background-position: -5px -10px; border: 3px solid rgb(224, 99, 70); }
 .profile-logo { display: block; width: 90px; margin-top: 6px; background-repeat: no-repeat; background-size: 90px; }
 .linkedin-logo     { background-image: url(/img/logos/linkedin-logo.png);     height: 24px; }
-.facebook-logo     { background-image: url(/img/logos/facebook-logo.png);     height: 20px; margin-top: 8px; }
+.github-logo { height: 24px; text-align: center; font-weight: 700; color: var(--text); margin-top: 8px; }
+.github-logo::before { content: 'GitHub'; }
 .couchsurfing-logo { background-image: url(/img/logos/couchsurfing-logo.png); height: 30px; background-position-y: -2px; }
 
 .phonemail { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 2rem; }

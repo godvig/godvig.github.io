@@ -2,7 +2,7 @@ import React from 'react';
 
 const profiles = [
   { id: 'linkedin', href: 'https://linkedin.com/in/adamenglund', label: 'LinkedIn' },
-  { id: 'facebook', href: 'https://facebook.com/adam.godvig.englund', label: 'Facebook' },
+  { id: 'github', href: 'https://github.com/godvig', label: 'GitHub' },
   { id: 'couchsurfing', href: 'https://couchsurfing.com/adam-englund', label: 'Couchsurfing' },
 ];
 

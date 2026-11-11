@@ -7,6 +7,7 @@ const locations = [
   { id: 'Kingston', name: 'Kingston' },
   { id: 'Gothenburg', name: 'Gothenburg' },
   { id: 'Milano', name: 'Milan' },
+  { id: 'Taipei', name: 'Taipei' },
 ];
 
 export default function Header() {
