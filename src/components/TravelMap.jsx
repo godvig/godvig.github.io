@@ -233,15 +233,11 @@ export default function TravelMap() {
   }, [show]);
 
   const [layersOpen, setLayersOpen] = useState(false);
-  // Turning a category on from its name: Lived/Worked/Visited start with colour only (markers are opt-in);
-  // Mountains and World Heritage start with everything.
-  const startsWith = { lived: { markers: false, area: true }, work: { markers: false, area: true }, visited: { markers: false, area: true },
-    mountain: { markers: true, area: true }, unesco: { markers: true, area: true }, football: { markers: true, area: false } };
-  const toggleKind = kind => setShow(prev => {
-    const on = prev[kind].markers || prev[kind].area;
-    return { ...prev, [kind]: on ? { markers: false, area: false } : startsWith[kind] };
-  });
-  const activeMarkers = Object.entries(show).filter(([k, v]) => k !== 'football' && v.markers).length;
+  // The top chips switch a category's main layer: colour for Lived/Worked/Visited, symbols for the rest.
+  // Extra layers (markers for the three colour categories, ranges and parks) live under Layers.
+  const mainPart = { lived: 'area', work: 'area', visited: 'area', mountain: 'markers', football: 'markers', unesco: 'markers' };
+  const toggleKind = kind => toggle(kind, mainPart[kind]);
+  const activeExtras = ['lived', 'work', 'visited', 'football'].filter(k => show[k].markers).length + (show.mountain.area ? 1 : 0) + (show.unesco.area ? 1 : 0);
   const toggle = (kind, part) => setShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
 
   const current = places.find(p => p.id === selected);
@@ -260,20 +256,29 @@ export default function TravelMap() {
         ))}
       </div>
       <div className="map-controls filters" role="group" aria-label="Show on map">
-        {Object.entries(kinds).map(([k, label]) => (
-          <button key={k} className={`filter-chip ${k}${show[k].markers || show[k].area ? ' on' : ''}`} aria-pressed={show[k].markers || show[k].area} onClick={() => toggleKind(k)}>
-            <Legend kind={k} />{label}
-          </button>
-        ))}
+        {Object.entries(kinds).filter(([k]) => k !== 'football').map(([k, label]) => {
+          const on = show[k][mainPart[k]];
+          return (
+            <button key={k} className={`filter-chip ${k}${on ? ' on' : ''}`} aria-pressed={on} onClick={() => toggleKind(k)}>
+              <Legend kind={k} />{label}
+            </button>
+          );
+        })}
         <button className={`layers-btn${layersOpen ? ' active' : ''}`} aria-expanded={layersOpen} onClick={() => setLayersOpen(o => !o)}>
-          Layers <span className="count">{activeMarkers}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
+          Layers <span className="count">{activeExtras}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
         </button>
       </div>
       {layersOpen && (
-        <div className="map-controls layers-panel" role="group" aria-label="Markers on map">
+        <div className="map-controls layers-panel" role="group" aria-label="More layers">
           <span className="layers-title">Markers</span>
-          {Object.entries(kinds).filter(([k]) => k !== 'football').map(([k, label]) => (
+          {['lived', 'work', 'visited', 'football'].map(k => (
             <button key={k} className={`filter-chip small ${k}${show[k].markers ? ' on' : ''}`} aria-pressed={show[k].markers} onClick={() => toggle(k, 'markers')}>
+              <Legend kind={k} />{kinds[k]}
+            </button>
+          ))}
+          <span className="layers-title">Areas</span>
+          {[['mountain', 'Mountain ranges'], ['unesco', 'Parks']].map(([k, label]) => (
+            <button key={k} className={`filter-chip small ${k}${show[k].area ? ' on' : ''}`} aria-pressed={show[k].area} onClick={() => toggle(k, 'area')}>
               <Legend kind={k} />{label}
             </button>
           ))}
