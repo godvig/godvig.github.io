@@ -254,7 +254,7 @@ export const places = [
   { id: 'rhine-valley', city: 'Upper Middle Rhine Valley', name: 'Upper Middle Rhine Valley', country: 'Germany',
     coords: [7.729, 50.137], kind: 'unesco', heritage: 'cultural', unescoId: 1066, when: '', photo: '' },
   { id: 'augsburg', city: 'Augsburg Water Management System', name: 'Water Management System of Augsburg', country: 'Germany',
-    coords: [10.898, 48.366], kind: 'unesco', heritage: 'cultural', unescoId: 1639, when: '', photo: '' },
+    coords: [10.898, 48.366], kind: 'unesco', heritage: 'cultural', unescoId: 1580, when: '', photo: '' },
   { id: 'acropolis', city: 'Acropolis of Athens', name: 'Acropolis, Athens', country: 'Greece',
     coords: [23.726, 37.971], kind: 'unesco', heritage: 'cultural', unescoId: 404, when: '', photo: '' },
   { id: 'thessaloniki', city: 'Byzantine City Walls, Thessaloniki', name: 'Paleochristian and Byzantine Monuments of Thessalonika (city walls)', country: 'Greece',
