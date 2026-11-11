@@ -59,7 +59,7 @@ a:hover { color: var(--orange); }
 .London     { background-image: url(/img/silhouettes/stp.png);       background-size: 300px; background-position-y: 80px; }
 .Kingston   { background-image: url(/img/silhouettes/kingston.png);  background-size: 150px; background-position-y: 120px; }
 .Gothenburg { background-image: url(/img/silhouettes/poseidon.png);  background-size: 110px; background-position-y: 100px; }
-.Taipei     { background-image: url(/img/silhouettes/taipei.png);    background-size: 85px; background-position-y: 60px; }
+.Taipei     { background-image: url(/img/silhouettes/taipei.png);    background-size: 40px; background-position-y: 55px; }
 .Milano     { background-image: url(/img/silhouettes/milano.png);    background-size: 220px; background-position-y: 88px; }
 
 .location-name {

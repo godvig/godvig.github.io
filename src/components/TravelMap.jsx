@@ -147,7 +147,7 @@ export default function TravelMap() {
   const [selected, setSelected] = useState('gothenburg');
   const [viewId, setViewId] = useState('europe');
   // Layers: what is drawn, independent of which categories are picked below
-  const [layers, setLayers] = useState({ countries: true, markers: true, ranges: false, parks: false });
+  const [layers, setLayers] = useState({ countries: true, markers: true, ranges: true, parks: true });
   const [show, setShow] = useState({ lived: true, work: false, visited: false, mountain: false, football: false, unesco: false });
 
   // Set up zoom: scroll wheel, pinch, double-click and dragging with the hand cursor
