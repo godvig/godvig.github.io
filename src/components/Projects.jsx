@@ -18,10 +18,11 @@ const projects = [
     status: 'Demo',
   },
   {
-    name: 'Doppelgambit',
-    code: 'https://github.com/godvig/doppelgambit',
-    text: 'A chess opening trainer with spaced repetition, plus a sparring partner that plays like a specific person: yourself or your next opponent. Built on Stockfish and a human-like engine.',
-    status: 'In progress',
+    name: 'Shadowbook',
+    app: 'https://godvig.github.io/shadowbook/',
+    code: 'https://github.com/godvig/shadowbook',
+    text: 'Chess opponent prep: enter a chess.com or Lichess username and spar against a bot that opens exactly like that player, then plays on like a human of their rating. Opening training with spaced repetition is next.',
+    status: 'Early release',
   },
   {
     name: 'Size on disk for SteamOS',
