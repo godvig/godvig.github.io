@@ -4,10 +4,10 @@ import React from 'react';
 // code: link to the source on GitHub
 const projects = [
   {
-    name: 'Släktarkivet',
-    app: 'https://godvig.github.io/slaktarkivet/',
-    code: 'https://github.com/godvig/slaktarkivet',
-    text: 'A genealogy tool: family tree, sources, timeline, map, photos and Excel import. Runs in the browser and saves to your own device, so try it with your own family.',
+    name: 'Kinsaga',
+    app: 'https://godvig.github.io/kinsaga/',
+    code: 'https://github.com/godvig/kinsaga',
+    text: 'Build your family history together: family tree, fan chart, sources, timeline, map and auto-written life stories. Runs in the browser with no account, so try the House of Vasa example or your own family.',
     status: 'Live',
   },
   {
