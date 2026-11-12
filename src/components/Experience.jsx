@@ -25,6 +25,7 @@ const jobs = [
   },
   {
     when: '2011 – 2016', role: 'Equity Analyst, Financial Administrator and Board Member', org: 'Kurdistan Investment Company', place: 'Lund',
+    text: 'An investment company focused on the Kurdistan Region of Iraq. Wrote the monthly fact sheets for investors, analysed companies on the Iraq Stock Exchange for the investment committee and managed part of the portfolio. Ran the bookkeeping towards the auditors, and travelled to Erbil to help prepare the launch of the Erbil Stock Exchange.',
   },
 ];
 

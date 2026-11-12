@@ -5,8 +5,7 @@ export default function Home() {
     <section id="home" className="section2">
       <div className="rowsection">
         <div className="hello">
-          <h1>Hi!</h1>
-          <p>I'm Adam</p>
+          <h1><span className="hi">Hi!</span> <span className="name">I'm Adam Englund</span></h1>
           <p className="tagline">I connect warehouse systems to transport platforms for global retailers, at Centiro in Gothenburg.</p>
         </div>
         <div className="piccontainer">

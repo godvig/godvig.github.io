@@ -22,7 +22,6 @@ export default function Contact() {
 
       <div className="phonemail">
         <a href="mailto:adamenglund3@gmail.com"><span className="icon mail" />adamenglund3@gmail.com</a>
-        <a href="tel:+46723755170"><span className="icon telephone" />+46 (0)72 375 51 70</a>
       </div>
     </section>
   );
