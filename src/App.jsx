@@ -7,7 +7,7 @@ import Home from './components/Home.jsx';
 import About from './components/About.jsx';
 import Experience from './components/Experience.jsx';
 import Projects from './components/Projects.jsx';
-import TravelMap from './components/TravelMap.jsx';
+import LazyMap from './components/LazyMap.jsx';
 import Contact from './components/Contact.jsx';
 import Footer from './components/Footer.jsx';
 
@@ -27,7 +27,7 @@ export default function App() {
         <About />
         <Experience />
         <Projects />
-        <TravelMap />
+        <LazyMap />
         <Contact />
       </main>
       <Footer />

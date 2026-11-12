@@ -120,8 +120,10 @@ a:hover { color: var(--orange); }
   min-height: 500px;
 }
 .hello { width: 50%; text-align: center; padding: 120px 1.5rem 0; }
-.hello h1 { font-size: 64px; font-weight: 800; margin: 0; line-height: 1.1; }
-.hello p { font-size: 50px; margin: 0.4rem 0 0; line-height: 1.15; }
+.hello h1 { margin: 0; font-weight: 400; }
+.hello h1 span { display: block; }
+.hello h1 .hi { font-size: 64px; font-weight: 800; line-height: 1.1; }
+.hello h1 .name { font-size: 46px; margin-top: 0.4rem; line-height: 1.15; }
 .hello .tagline { font-size: 1.15rem; color: var(--muted); max-width: 26rem; margin: 1.5rem auto 0; line-height: 1.5; }
 .piccontainer { width: 50%; display: flex; align-items: flex-end; justify-content: center; }
 .cv-pic { width: 255px; height: auto; display: block; }
@@ -186,6 +188,7 @@ a:hover { color: var(--orange); }
 /* ---------- Map ---------- */
 .map-page { background: var(--navy-deep); color: #f2f2f7; }
 .map-page .page-header { color: var(--gold); }
+.map-placeholder { min-height: 640px; }
 .map-page .text-block { color: #c9c9da; }
 
 .map-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 1.25rem 0 1.5rem; }
@@ -300,8 +303,8 @@ footer { background: var(--grey); }
   .location { zoom: 0.62; }
   .rowsection { min-height: 0; }
   .hello { padding-top: 70px; }
-  .hello h1 { font-size: 48px; }
-  .hello p { font-size: 36px; }
+  .hello h1 .hi { font-size: 48px; }
+  .hello h1 .name { font-size: 32px; }
   .cv-pic { width: 170px; }
   .timeline li { grid-template-columns: 1fr; gap: 0.2rem; }
   .edu { grid-template-columns: 1fr; gap: 0.1rem; }

@@ -1,7 +1,9 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import App from './App.jsx';
-import '@fontsource-variable/mona-sans/wdth.css';
 import './styles.css';
 
-createRoot(document.getElementById('app')).render(<App />);
+const root = document.getElementById('app');
+// The build prerenders the page into #app (see scripts/prerender.mjs); in dev it is empty.
+if (root.hasChildNodes()) hydrateRoot(root, <App />);
+else createRoot(root).render(<App />);
