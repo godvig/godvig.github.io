@@ -18,9 +18,9 @@ const projects = [
     status: 'Live',
   },
   {
-    name: 'Kinsaga',
-    app: 'https://godvig.github.io/kinsaga/',
-    code: 'https://github.com/godvig/kinsaga',
+    name: 'Klansagan',
+    app: 'https://godvig.github.io/klansagan/',
+    code: 'https://github.com/godvig/klansagan',
     text: 'Build your family history together: family tree, fan chart, sources, timeline and map, made for sharing and working on with relatives. Runs in the browser with no account, so try the example or your own family.',
     status: 'Live',
   },
