@@ -104,7 +104,7 @@ export const places = [
   { id: 'olympus', city: 'Mount Olympus', country: 'Greece', coords: [22.36, 40.09], kind: 'mountain', when: '2026',
     text: 'Peak · 2,918 m (Mytikas). Greece\'s highest.' },
   { id: 'stubaital', city: 'Stubaital', country: 'Austria', coords: [11.30, 47.11], kind: 'mountain', when: '2003',
-    text: 'Valley in the Tyrolean Alps. The Franz-Senn-Hütte is a legendary place to stay.' },
+    text: 'Valley in the Tyrolean Alps. Franz-Senn-Hütte is a legendary place to stay.' },
   { id: 'lac-blanc', city: 'Lac Blanc', country: 'France', coords: [6.89, 45.98], kind: 'mountain', when: '2022',
     text: 'Alpine lake above Chamonix, facing Mont Blanc.' },
   { id: 'adirondacks', city: 'Adirondacks', country: 'United States of America', coords: [-74.10, 44.10], kind: 'mountain', when: '2014',
