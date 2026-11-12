@@ -24,9 +24,9 @@ export default function App() {
       <Header />
       <main>
         <Home />
+        <Projects />
         <About />
         <Experience />
-        <Projects />
         <LazyMap />
         <Contact />
       </main>

@@ -6,7 +6,7 @@ export default function Home() {
       <div className="rowsection">
         <div className="hello">
           <h1><span className="hi">Hi!</span> <span className="name">I'm Adam Englund</span></h1>
-          <p className="tagline">I connect warehouse systems to transport platforms for global retailers, at Centiro in Gothenburg.</p>
+          <p className="tagline">Engineer and economist based in Gothenburg. I work with logistics integrations by day and build my own tools by night.</p>
         </div>
         <div className="piccontainer">
           <img className="cv-pic" src="/img/pictures/CV-bild.jpg" alt="Adam Englund" />

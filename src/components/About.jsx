@@ -7,17 +7,17 @@ export default function About() {
       <div className="text-block">
         <p>
           I'm a Swede who grew up in Luxembourg and has since lived, studied or worked in the UK, Canada, Italy,
-          Taiwan and Spain. I studied industrial engineering and innovation management at Chalmers and economics at
-          Lund University.
+          Taiwan and Spain. I hold degrees in industrial engineering and innovation management from Chalmers and in
+          economics from Lund University, and I like working where business and technology meet.
         </p>
         <p>
-          Today I work as an Application Specialist at Centiro, where I integrate global retailers' warehouse systems
-          with Centiro's transport management platform. I like the whole chain: talking to the customer, figuring out
-          what's actually wrong, and shipping the fix myself.
+          Today I'm an Application Specialist at Centiro, connecting global retailers' warehouse systems to Centiro's
+          transport management platform. I like the whole chain: talking to the customer, finding the real problem
+          and shipping the fix myself.
         </p>
         <p>
-          In the evenings I build small tools of my own, like a market data dashboard and a Decky Loader plugin
-          for SteamOS. I first built this site in 2019 to learn React, and I'm still improving it.
+          In my spare time I build tools I'd like to use myself, from a chess trainer that plays like your next
+          opponent to a family-history app and a stock screener. You'll find them above, with the code on GitHub.
         </p>
       </div>
     </section>

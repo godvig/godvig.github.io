@@ -2,9 +2,9 @@ import React from 'react';
 
 const links = [
   ['#home', 'HOME'],
+  ['#projects', 'PROJECTS'],
   ['#about', 'ABOUT'],
   ['#experience', 'EXPERIENCE'],
-  ['#projects', 'PROJECTS'],
   ['#map', 'MAP'],
   ['#contact', 'CONTACT'],
 ];
