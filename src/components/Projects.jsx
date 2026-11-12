@@ -39,7 +39,7 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="page">
+    <section id="projects" className="page alt">
       <h2 className="page-header">Projects</h2>
       <div className="project-grid">
         {projects.map(p => (
