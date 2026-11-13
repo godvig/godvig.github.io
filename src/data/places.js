@@ -40,7 +40,7 @@ export const places = [
   // ---------- Work, studies and major life events ----------
   { id: 'erbil', city: 'Erbil', country: 'Iraq', coords: [44.01, 36.19], kind: 'work',
     when: '2014',
-    text: 'Erbil, Kurdistan Region of Iraq.' },
+    text: 'Work trips for Kurdistan Investment Company: investment meetings with local companies and preparations for the launch of the Erbil Stock Exchange (ESX).' },
   { id: 'geneva', city: 'Geneva', country: 'Switzerland', coords: [6.14, 46.20], kind: 'work',
     when: '5+ visits',
     text: 'Client work on site for Centiro.' },
@@ -62,14 +62,16 @@ export const places = [
   { id: 'beijing', city: 'Beijing', country: 'China', coords: [116.40, 39.90], kind: 'visited', when: '2013' },
   { id: 'new-delhi', city: 'New Delhi', country: 'India', coords: [77.21, 28.61], kind: 'visited', when: '2025' },
   { id: 'jaipur', city: 'Jaipur', country: 'India', coords: [75.79, 26.91], kind: 'visited', when: '2025' },
-  { id: 'istanbul', city: 'Istanbul', country: 'Turkey', coords: [28.98, 41.01], kind: 'visited', when: '2014' },
+  { id: 'istanbul', city: 'Istanbul', country: 'Turkey', coords: [28.98, 41.01], kind: 'visited', when: '2014, 2026' },
+  { id: 'izmir', city: 'Izmir', country: 'Turkey', coords: [27.14, 38.42], kind: 'visited', when: '2017' },
+  { id: 'lviv-city', city: 'Lviv', country: 'Ukraine', coords: [24.03, 49.84], kind: 'visited', when: '2015' },
   { id: 'nairobi', city: 'Nairobi', country: 'Kenya', coords: [36.82, -1.29], kind: 'visited', when: '2023' },
   { id: 'mombasa', city: 'Mombasa', country: 'Kenya', coords: [39.67, -4.04], kind: 'visited', when: '2023' },
   { id: 'hualien', city: 'Hualien', country: 'Taiwan', coords: [121.60, 23.98], kind: 'visited', when: '' },
   { id: 'taitung', city: 'Taitung', country: 'Taiwan', coords: [121.14, 22.76], kind: 'visited', when: '' },
   { id: 'taichung', city: 'Taichung', country: 'Taiwan', coords: [120.68, 24.15], kind: 'visited', when: '' },
   { id: 'victoria', city: 'Victoria', country: 'Canada', region: 'British Columbia', coords: [-123.37, 48.43], kind: 'visited', when: '' },
-  { id: 'st-petersburg-city', city: 'St. Petersburg', country: 'Russia', coords: [30.32, 59.94], kind: 'visited', when: '' },
+  { id: 'st-petersburg-city', city: 'St. Petersburg', country: 'Russia', coords: [30.32, 59.94], kind: 'visited', when: '2016' },
   { id: 'tainan', city: 'Tainan', country: 'Taiwan', coords: [120.21, 22.99], kind: 'visited', when: '2020' },
   { id: 'kenting', city: 'Kenting', country: 'Taiwan', coords: [120.80, 21.95], kind: 'visited', when: '2020' },
   { id: 'fort-worth', city: 'Fort Worth', country: 'United States of America', coords: [-97.33, 32.76], kind: 'visited', when: '2025' },
@@ -87,12 +89,10 @@ export const places = [
   { id: 'kelowna', city: 'Kelowna', country: 'Canada', coords: [-119.50, 49.89], kind: 'visited', when: '2024' },
   { id: 'sarajevo', city: 'Sarajevo', country: 'Bosnia and Herz.', coords: [18.41, 43.86], kind: 'visited', when: '2021' },
   { id: 'lisbon', city: 'Lisbon', country: 'Portugal', coords: [-9.14, 38.72], kind: 'visited', when: '2023' },
-  { id: 'dublin', city: 'Dublin', country: 'Ireland', coords: [-6.26, 53.35], kind: 'visited', when: '2023' },
   { id: 'san-marino', city: 'San Marino', country: 'San Marino', coords: [12.45, 43.94], kind: 'visited', when: '2019' },
   { id: 'vatican', city: 'Vatican City', country: 'Vatican', coords: [12.45, 41.90], kind: 'visited', when: '2019' },
   { id: 'liechtenstein', city: 'Liechtenstein', country: 'Liechtenstein', coords: [9.52, 47.14], kind: 'visited', when: '2019' },
   { id: 'andorra', city: 'Andorra', country: 'Andorra', coords: [1.52, 42.51], kind: 'visited', when: '2020' },
-  { id: 'malta', city: 'Malta', country: 'Malta', coords: [14.51, 35.90], kind: 'visited', when: '' },
 
   // ---------- Mountains ----------
   { id: 'kebnekaise', city: 'Kebnekaise', country: 'Sweden', coords: [18.53, 67.90], kind: 'mountain', when: '2018',
@@ -388,7 +388,7 @@ export const workRegions = ['Ontario'];
 export const visitedCountries = [
   'Morocco', 'Belgium', 'Netherlands', 'Norway', 'Denmark', 'Latvia', 'Lithuania',
   'Czechia', 'Slovenia', 'Austria', 'Switzerland', 'Germany', 'France', 'Poland',
-  'Croatia', 'Serbia', 'Hungary', 'Russia', 'Cyprus', 'Portugal', 'Ireland',
+  'Croatia', 'Serbia', 'Hungary', 'Russia', 'Cyprus', 'Portugal', 'Turkey',
   'Finland', 'Egypt', 'Greece', 'Ukraine', 'United Kingdom', 'Spain', 'Luxembourg', 'Sweden', 'Iraq', 'Italy',
 ];
 
