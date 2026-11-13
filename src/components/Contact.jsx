@@ -21,7 +21,7 @@ export default function Contact() {
       </div>
 
       <div className="phonemail">
-        <a href="mailto:adamenglund3@gmail.com"><span className="icon mail" />adamenglund3@gmail.com</a>
+        <a href="mailto:adamenglund@godvig.com"><span className="icon mail" />adamenglund@godvig.com</a>
       </div>
     </section>
   );
