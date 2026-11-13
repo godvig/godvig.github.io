@@ -388,7 +388,7 @@ export const workRegions = ['Ontario'];
 export const visitedCountries = [
   'Morocco', 'Belgium', 'Netherlands', 'Norway', 'Denmark', 'Latvia', 'Lithuania',
   'Czechia', 'Slovenia', 'Austria', 'Switzerland', 'Germany', 'France', 'Poland',
-  'Croatia', 'Serbia', 'Hungary', 'Russia', 'Cyprus', 'Portugal', 'Turkey',
+  'Croatia', 'Serbia', 'Hungary', 'Russia', 'Cyprus', 'Portugal', 'Turkey', 'Ireland',
   'Finland', 'Egypt', 'Greece', 'Ukraine', 'United Kingdom', 'Spain', 'Luxembourg', 'Sweden', 'Iraq', 'Italy',
 ];
 

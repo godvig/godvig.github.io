@@ -5,21 +5,21 @@ import React from 'react';
 const projects = [
   {
     name: 'Stock screener',
-    app: 'https://godvig.github.io/market-dashboard/',
+    app: 'https://screener.godvig.com/',
     code: 'https://github.com/godvig/market-dashboard',
     text: 'Watchlists with scorecards, traffic lights and candlestick charts, pulling data from free market-data APIs. The online demo runs on made-up prices; the real version runs locally with live data.',
     status: 'Demo',
   },
   {
     name: 'Shadowbook',
-    app: 'https://godvig.github.io/shadowbook/',
+    app: 'https://shadowbook.godvig.com/',
     code: 'https://github.com/godvig/shadowbook',
     text: 'Chess opponent prep: play the person, not the engine. Scout any chess.com or Lichess player and spar against a bot that opens like them and plays on at their rating, then see where your preparation ran out. Runs in the browser with no account, so try the built-in demo player.',
     status: 'Live',
   },
   {
     name: 'Klansagan',
-    app: 'https://godvig.github.io/klansagan/',
+    app: 'https://klansagan.godvig.com/',
     code: 'https://github.com/godvig/klansagan',
     text: 'Build your family history together: family tree, fan chart, sources, timeline and map, made for sharing and working on with relatives. Runs in the browser with no account, so try the example or your own family.',
     status: 'Live',
