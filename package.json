@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview",
-    "test": "node scripts/check-build.mjs"
+    "test": "node --test src/counter.test.js && node scripts/check-build.mjs"
   },
   "dependencies": {
     "d3-geo": "^3.1.1",

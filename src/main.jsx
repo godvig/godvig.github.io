@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import App from './App.jsx';
 import { detectLang, pathLang, langPath } from './i18n.jsx';
+import { countView } from './counter.js';
 import './styles.css';
 
 // In-page links scroll smoothly without adding #section to the address bar.
@@ -30,3 +31,6 @@ const prerendered = pathLang();
 if (lang !== prerendered) history.replaceState(null, '', langPath(lang) + location.search);
 if (root.hasChildNodes() && lang === prerendered) hydrateRoot(root, <App lang={lang} />);
 else createRoot(root).render(<App lang={lang} />);
+
+// One anonymous count per page load, under the language the visitor ended up with (see counter.js).
+countView(langPath(lang));

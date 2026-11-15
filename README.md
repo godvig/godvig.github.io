@@ -36,21 +36,21 @@ src/i18n.jsx           language context, detection and the { en, sv } text helpe
 src/components/        one component per section (Home, Projects, About, Experience, Contact…)
 src/components/TravelMap.jsx   the map (d3-geo, d3-zoom, topojson), lazy-loaded via LazyMap.jsx
 src/data/places.js     every place on the map, its notes and the Swedish place names
+src/counter.js         anonymous visit counting: what is sent, and when nothing is
 scripts/prerender.mjs  renders / and /sv/ to static HTML after the build
 scripts/check-build.mjs  smoke test of the built pages
 ```
 
-React 18 + Vite 5. No UI framework, no tracking, no cookies. Hosted on GitHub Pages with a custom domain; every push to `main` builds, tests and deploys.
+React 18 + Vite 5. No UI framework, no cookies, no third-party scripts. Visits are counted anonymously with [GoatCounter](https://www.goatcounter.com/): `src/counter.js` sends one request per page load with the path, title, referrer and screen width, and nothing when the browser sends Do Not Track. Hosted on GitHub Pages with a custom domain; every push to `main` builds, tests and deploys.
 
 To edit content: texts live next to the component that shows them, as `{ en, sv }` pairs. Places on the map are in `src/data/places.js`.
 
 ## Tests
 
-`npm test` checks the built site: both languages are prerendered, with the right `lang`, canonical and `hreflang` tags and key content in each. It runs in CI before every deploy, so a broken build never goes live.
+`npm test` first runs the unit tests for the visit counter (what it sends and when it stays silent), then checks the built site: both languages are prerendered, with the right `lang`, canonical and `hreflang` tags and key content in each. It runs in CI before every deploy, so a broken build never goes live.
 
 ## Roadmap
 
-- Visit statistics without cookies
 - Self-hosted fonts
 - Taller map on mobile
 

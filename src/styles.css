@@ -326,6 +326,7 @@ a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
 /* ---------- Footer ---------- */
 footer { background: var(--grey); }
 .footerText { margin: 0; text-align: center; line-height: 70px; font-size: 16px; }
+.footerNote { margin: -18px 0 0; padding-bottom: 16px; text-align: center; font-size: 13px; color: var(--muted); }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 900px) {
