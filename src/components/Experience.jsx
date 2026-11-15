@@ -74,7 +74,7 @@ const jobs = [
 ];
 
 const education = [
-  ['Chalmers', { en: 'M.Sc. Management and Economics of Innovation (2021)', sv: 'Civilingenjörsexamen, innovationsekonomi (2021)' }],
+  ['Chalmers', { en: 'M.Sc. in Engineering (Swedish civilingenjör), Management and Economics of Innovation (2021)', sv: 'Civilingenjörsexamen, innovationsekonomi (2021)' }],
   [{ en: 'Lund University', sv: 'Lunds universitet' }, { en: 'B.Sc. Business and Economics, economics and public policy (2021)', sv: 'Ekonomie kandidatexamen, nationalekonomi och offentlig politik (2021)' }],
   ['Chalmers', { en: 'B.Sc. Industrial Engineering and Management, minor in IT (2019)', sv: 'Kandidatexamen, industriell ekonomi med inriktning IT (2019)' }],
   [{ en: 'Exchanges', sv: 'Utbyten' }, { en: 'Queen\'s University (Canada), Politecnico di Milano (Italy), UNITECH International programme (2019/20)', sv: 'Queen\'s University (Kanada), Politecnico di Milano (Italien), UNITECH International-programmet (2019/20)' }],
