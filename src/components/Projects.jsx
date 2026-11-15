@@ -28,8 +28,8 @@ const projects = [
   },
   {
     name: 'Släktsagan',
-    app: 'https://klansagan.godvig.com/',
-    code: 'https://github.com/godvig/slaktsagan',
+    app: 'https://saga.godvig.com/',
+    code: 'https://github.com/godvig/family-saga',
     img: 'slaktsagan',
     text: {
       en: 'Build your family history together: family tree, fan chart, sources, timeline and map, made for sharing and working on with relatives. Runs in the browser with no account, so try the example or your own family.',
