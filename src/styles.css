@@ -109,6 +109,20 @@ a:hover { color: var(--orange); }
 .side-drawer a { color: var(--gold); text-decoration: none; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.05em; }
 .side-drawer a:hover, .side-drawer a:focus-visible { color: var(--orange); }
 
+.side-drawer .lang-switch { display: flex; gap: 0.6rem; margin-top: 2rem; }
+.lang-switch button {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer;
+  background: transparent; border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff; font: inherit; font-size: 0.9rem; opacity: 0.6;
+}
+.lang-switch button:hover, .lang-switch button:focus-visible { opacity: 1; }
+.lang-switch button.on { opacity: 1; border-color: var(--gold); }
+.lang-switch svg { width: 24px; height: 15px; border-radius: 2px; display: block; }
+
+a.logo { transition: transform 0.15s ease; }
+a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
+
 .backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 100; }
 
 /* ---------- Home ---------- */
@@ -271,6 +285,9 @@ a:hover { color: var(--orange); }
 .layers-title { align-self: center; color: #c9c9da; font-size: 0.85rem; }
 .map-controls.filters { margin-top: -0.75rem; }
 .map-controls.layers-panel { margin-top: -0.75rem; }
+.chip-pair { display: inline-flex; }
+.chip-pair .filter-chip:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.chip-pair .filter-chip:last-child { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: -1px; }
 
 .place-group h4 { display: flex; align-items: center; gap: 0.5rem; margin: 1.4rem 0 0.6rem; font-size: 0.95rem; color: #c9c9da; font-weight: 600; }
 .place-list.lived button { color: #c7aef0; border-color: var(--purple); }

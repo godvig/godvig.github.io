@@ -1,13 +1,15 @@
+import { useT } from '../i18n.jsx';
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 
 // The map and its geodata are the heaviest part of the page, so they load only when the visitor gets near.
 const TravelMap = lazy(() => import('./TravelMap.jsx'));
 
 function Placeholder({ innerRef }) {
+  const t = useT();
   return (
     <section id="map" ref={innerRef} className="page map-page map-placeholder">
-      <h2 className="page-header">Map</h2>
-      <p className="text-block center">Where I've lived, worked and travelled. Loading the map…</p>
+      <h2 className="page-header">{t({ en: 'Map', sv: 'Karta' })}</h2>
+      <p className="text-block center">{t({ en: "Where I've lived, worked and travelled. Loading the map…", sv: 'Där jag har bott, jobbat och rest. Laddar kartan…' })}</p>
     </section>
   );
 }

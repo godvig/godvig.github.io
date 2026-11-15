@@ -1,4 +1,5 @@
 import React from 'react';
+import { useT } from '../i18n.jsx';
 
 const profiles = [
   { id: 'linkedin', href: 'https://linkedin.com/in/adamenglund', label: 'LinkedIn' },
@@ -7,9 +8,10 @@ const profiles = [
 ];
 
 export default function Contact() {
+  const t = useT();
   return (
     <section id="contact" className="page contact">
-      <h2 className="page-header">Get in contact</h2>
+      <h2 className="page-header">{t({ en: 'Get in contact', sv: 'Hör av dig' })}</h2>
 
       <div className="contact-container">
         {profiles.map(p => (

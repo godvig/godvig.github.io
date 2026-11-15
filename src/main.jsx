@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import App from './App.jsx';
+import { detectLang, pathLang, langPath } from './i18n.jsx';
 import './styles.css';
 
 // In-page links scroll smoothly without adding #section to the address bar.
@@ -22,5 +23,10 @@ if (location.hash) {
 
 const root = document.getElementById('app');
 // The build prerenders the page into #app (see scripts/prerender.mjs); in dev it is empty.
-if (root.hasChildNodes()) hydrateRoot(root, <App />);
-else createRoot(root).render(<App />);
+// / is prerendered in English and /sv/ in Swedish. If the visitor wants the other language,
+// the address changes and the page is rendered fresh instead of hydrated.
+const lang = detectLang();
+const prerendered = pathLang();
+if (lang !== prerendered) history.replaceState(null, '', langPath(lang) + location.search);
+if (root.hasChildNodes() && lang === prerendered) hydrateRoot(root, <App lang={lang} />);
+else createRoot(root).render(<App lang={lang} />);

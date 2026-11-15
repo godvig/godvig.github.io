@@ -10,13 +10,14 @@ import Projects from './components/Projects.jsx';
 import LazyMap from './components/LazyMap.jsx';
 import Contact from './components/Contact.jsx';
 import Footer from './components/Footer.jsx';
+import { LangProvider } from './i18n.jsx';
 
-export default function App() {
+export default function App({ lang = 'en' }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const close = () => setDrawerOpen(false);
 
   return (
-    <>
+    <LangProvider initial={lang}>
       <DrawerToggleButton open={drawerOpen} click={() => setDrawerOpen(o => !o)} />
       <SideDrawer show={drawerOpen} onNavigate={close} />
       {drawerOpen && <Backdrop click={close} />}
@@ -31,6 +32,6 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </LangProvider>
   );
 }

@@ -7,7 +7,8 @@ import 'd3-transition';
 import world from '../data/world.json';
 import usAtlas from '../data/us-states.json';
 import canadaAtlas from '../data/canada-provinces.json';
-import { places, kinds, views, workCountries, workRegions, visitedCountries, visitedRegions, heritageTypes } from '../data/places.js';
+import { useT } from '../i18n.jsx';
+import { places, kinds, views, workCountries, workRegions, visitedCountries, visitedRegions, heritageTypes, svNames } from '../data/places.js';
 import { ranges, parks } from '../data/ranges.js';
 
 const W = 960, H = 500;
@@ -58,7 +59,6 @@ const toShape = r => {
   return shape;
 };
 const LIST_LIMIT = 12; // longer lists are collapsed behind a "Show all" button
-const areaLabels = { lived: 'Colour', work: 'Colour', visited: 'Colour', mountain: 'Ranges', unesco: 'Parks' };
 const rangeShapes = ranges.map(toShape);
 const parkShapes = parks.map(toShape);
 
@@ -141,6 +141,9 @@ function Legend({ kind }) {
 
 // ---------- Component ----------
 export default function TravelMap() {
+  const tr = useT();
+  const sv = tr({ en: false, sv: true });
+  const nm = n => (sv && svNames[n]) || n;
   const svgRef = useRef(null);
   const zoomRef = useRef(null);
   const [t, setT] = useState(zoomIdentity);
@@ -237,7 +240,16 @@ export default function TravelMap() {
   // Extra layers (markers for the three colour categories, ranges and parks) live under Layers.
   const mainPart = { lived: 'area', work: 'area', visited: 'area', mountain: 'markers', football: 'markers', unesco: 'markers' };
   const toggleKind = kind => toggle(kind, mainPart[kind]);
-  const activeExtras = ['lived', 'work', 'visited', 'football'].filter(k => show[k].markers).length + (show.mountain.area ? 1 : 0) + (show.unesco.area ? 1 : 0);
+  const markerKinds = ['lived', 'work', 'visited', 'mountain', 'unesco', 'football'];
+  // Mountains + ranges and World Heritage + parks sit together: the first tap turns on both halves,
+  // after that each half toggles on its own.
+  const pairs = [['mountain', { en: 'Mountain ranges', sv: 'Bergskedjor' }], ['unesco', { en: 'Parks', sv: 'Parker' }]];
+  const togglePair = (kind, part) => setShow(prev => {
+    const cur = prev[kind];
+    const next = !cur.markers && !cur.area ? { markers: true, area: true } : { ...cur, [part]: !cur[part] };
+    return { ...prev, [kind]: next };
+  });
+  const activeExtras = markerKinds.filter(k => show[k].markers).length + (show.mountain.area ? 1 : 0) + (show.unesco.area ? 1 : 0);
   const toggle = (kind, part) => setShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
 
   const current = places.find(p => p.id === selected);
@@ -247,40 +259,43 @@ export default function TravelMap() {
 
   return (
     <section id="map" className="page map-page">
-      <h2 className="page-header">Map</h2>
-      <p className="text-block center">Where I've lived, worked and travelled. Drag to move, scroll or pinch to zoom, click a symbol.</p>
+      <h2 className="page-header">{tr({ en: 'Map', sv: 'Karta' })}</h2>
+      <p className="text-block center">{tr({ en: "Where I've lived, worked and travelled. Drag to move, scroll or pinch to zoom, click a symbol.", sv: 'Där jag har bott, jobbat och rest. Dra för att flytta, scrolla eller nyp för att zooma, klicka på en symbol.' })}</p>
 
-      <div className="map-controls" role="group" aria-label="Map view">
+      <div className="map-controls" role="group" aria-label={tr({ en: 'Map view', sv: 'Kartvy' })}>
         {views.map(v => (
-          <button key={v.id} className={v.id === viewId ? 'active' : ''} onClick={() => goToView(v)}>{v.label}</button>
+          <button key={v.id} className={v.id === viewId ? 'active' : ''} onClick={() => goToView(v)}>{tr(v.label)}</button>
         ))}
       </div>
-      <div className="map-controls filters" role="group" aria-label="Show on map">
-        {Object.entries(kinds).filter(([k]) => k !== 'football').map(([k, label]) => {
+      <div className="map-controls filters" role="group" aria-label={tr({ en: 'Show on map', sv: 'Visa på kartan' })}>
+        {['lived', 'work', 'visited'].map(k => {
           const on = show[k][mainPart[k]];
           return (
             <button key={k} className={`filter-chip ${k}${on ? ' on' : ''}`} aria-pressed={on} onClick={() => toggleKind(k)}>
-              <Legend kind={k} />{label}
+              <Legend kind={k} />{tr(kinds[k])}
             </button>
           );
         })}
         <button className={`layers-btn${layersOpen ? ' active' : ''}`} aria-expanded={layersOpen} onClick={() => setLayersOpen(o => !o)}>
-          Layers <span className="count">{activeExtras}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
+          {tr({ en: 'Layers', sv: 'Lager' })} <span className="count">{activeExtras}</span> <span aria-hidden="true">{layersOpen ? '▴' : '▾'}</span>
         </button>
       </div>
       {layersOpen && (
-        <div className="map-controls layers-panel" role="group" aria-label="More layers">
-          <span className="layers-title">Markers</span>
+        <div className="map-controls layers-panel" role="group" aria-label={tr({ en: 'More layers', sv: 'Fler lager' })}>
           {['lived', 'work', 'visited', 'football'].map(k => (
             <button key={k} className={`filter-chip small ${k}${show[k].markers ? ' on' : ''}`} aria-pressed={show[k].markers} onClick={() => toggle(k, 'markers')}>
-              <Legend kind={k} />{kinds[k]}
+              <Legend kind={k} />{tr(kinds[k])}
             </button>
           ))}
-          <span className="layers-title">Areas</span>
-          {[['mountain', 'Mountain ranges'], ['unesco', 'Parks']].map(([k, label]) => (
-            <button key={k} className={`filter-chip small ${k}${show[k].area ? ' on' : ''}`} aria-pressed={show[k].area} onClick={() => toggle(k, 'area')}>
-              <Legend kind={k} />{label}
-            </button>
+          {pairs.map(([k, areaLabel]) => (
+            <span key={k} className="chip-pair" role="group" aria-label={tr(kinds[k])}>
+              <button className={`filter-chip small ${k}${show[k].markers ? ' on' : ''}`} aria-pressed={show[k].markers} onClick={() => togglePair(k, 'markers')}>
+                <Legend kind={k} />{tr(kinds[k])}
+              </button>
+              <button className={`filter-chip small ${k}${show[k].area ? ' on' : ''}`} aria-pressed={show[k].area} onClick={() => togglePair(k, 'area')}>
+                {tr(areaLabel)}
+              </button>
+            </span>
           ))}
         </div>
       )}
@@ -288,10 +303,10 @@ export default function TravelMap() {
       <div className="map-layout">
         <div className="map-frame">
           <div className="zoom-buttons">
-            <button onClick={() => zoomBy(1.6)} aria-label="Zoom in">+</button>
-            <button onClick={() => zoomBy(1 / 1.6)} aria-label="Zoom out">−</button>
+            <button onClick={() => zoomBy(1.6)} aria-label={tr({ en: 'Zoom in', sv: 'Zooma in' })}>+</button>
+            <button onClick={() => zoomBy(1 / 1.6)} aria-label={tr({ en: 'Zoom out', sv: 'Zooma ut' })}>−</button>
           </div>
-          <svg ref={svgRef} onClick={onMapClick} viewBox={`0 0 ${W} ${H}`} role="img" aria-label="World map with the places Adam has lived, worked and visited">
+          <svg ref={svgRef} onClick={onMapClick} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={tr({ en: 'World map with the places Adam has lived, worked and visited', sv: 'Världskarta med platser där Adam har bott, jobbat och varit' })}>
             <defs>
               <pattern id="range-hatch" patternUnits="userSpaceOnUse" width={hatch} height={hatch} patternTransform="rotate(45)">
                 <line x1="0" y1="0" x2="0" y2={hatch} className="hatch-line" strokeWidth={1.6 / t.k} />
@@ -338,15 +353,15 @@ export default function TravelMap() {
                     transform={`translate(${x},${y}) scale(${ms})`}
                     tabIndex={0}
                     role="button"
-                    aria-label={`${p.city}, ${p.country}`}
+                    aria-label={`${nm(p.city)}, ${nm(p.country)}`}
                     aria-pressed={isSel}
                     onClick={() => select_(p.id)}
                     onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), select_(p.id))}
                   >
-                    <title>{p.city}</title>
+                    <title>{nm(p.city)}</title>
                     <circle r="13" className="hit" />
                     <Symbol kind={p.kind} heritage={p.heritage} selected={isSel} />
-                    {label && <text x={isSel ? 17 : 11} y="4">{p.city}</text>}
+                    {label && <text x={isSel ? 17 : 11} y="4">{nm(p.city)}</text>}
                   </g>
                 );
               })}
@@ -355,31 +370,32 @@ export default function TravelMap() {
         </div>
 
         <aside className="map-info" aria-live="polite">
-          {!current && <p className="map-hint">Click a symbol on the map to read about the place.</p>}
+          {!current && <p className="map-hint">{tr({ en: 'Click a symbol on the map to read about the place.', sv: 'Klicka på en symbol på kartan för att läsa om platsen.' })}</p>}
           {current && (
             <>
-              <h3>{current.name || current.city}</h3>
+              <h3>{current.name || nm(current.city)}</h3>
               <p className="map-meta">
                 {regionOf[current.id]
                   ? `${regionOf[current.id]}, ${current.country === USA ? 'USA' : 'Canada'}`
-                  : current.country === current.city ? kinds[current.kind] : current.country}
-                {current.when ? ` · ${current.when}` : ''}
+                  : current.country === current.city ? tr(kinds[current.kind]) : nm(current.country)}
+                {current.when ? ` · ${sv ? current.when.replace('now', 'idag') : current.when}` : ''}
               </p>
               {current.kind === 'unesco' && (
                 <p className="heritage">
-                  <span className={`heritage-tag ${current.heritage}`}>{heritageTypes[current.heritage]}</span>
+                  <span className={`heritage-tag ${current.heritage}`}>{tr(heritageTypes[current.heritage])}</span>
                   <a href={`https://whc.unesco.org/en/list/${current.unescoId}/`} target="_blank" rel="noopener noreferrer">
-                    UNESCO World Heritage page
+                    {tr({ en: 'UNESCO World Heritage page', sv: 'UNESCO:s världsarvssida' })}
                   </a>
                 </p>
               )}
-              {current.text && <p>{current.text}</p>}
+              {current.text && <p>{tr(current.text)}</p>}
               {current.photo && (
-                <img className="jump-photo" src={current.photo} alt={`Jump photo at ${current.name || current.city}`} loading="lazy" />
+                <img className="jump-photo" src={current.photo} alt={`${tr({ en: "Jump photo at", sv: "Hoppbild vid" })} ${current.name || current.city}`} loading="lazy" />
               )}
             </>
           )}
           {Object.entries(kinds).filter(([k]) => show[k].markers).map(([k, label]) => {
+            label = tr(label);
             const all = places.filter(p => p.kind === k)
               .sort((x, y) => (k === 'unesco' ? x.city.localeCompare(y.city) : 0));
             const open = expanded[k];
@@ -395,13 +411,13 @@ export default function TravelMap() {
                 <ul className={`place-list ${k}`}>
                   {list.map(p => (
                     <li key={p.id}>
-                      <button className={p.id === selected ? 'active' : ''} onClick={() => select_(p.id)}>{p.city}</button>
+                      <button className={p.id === selected ? 'active' : ''} onClick={() => select_(p.id)}>{nm(p.city)}</button>
                     </li>
                   ))}
                   {all.length > LIST_LIMIT && (
                     <li>
                       <button className="more" onClick={() => setExpanded(e => ({ ...e, [k]: !e[k] }))}>
-                        {open ? 'Show fewer' : `Show all ${all.length}`}
+                        {open ? tr({ en: 'Show fewer', sv: 'Visa färre' }) : tr({ en: `Show all ${all.length}`, sv: `Visa alla ${all.length}` })}
                       </button>
                     </li>
                   )}
