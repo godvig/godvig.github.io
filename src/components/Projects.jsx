@@ -21,14 +21,14 @@ const projects = [
     code: 'https://github.com/godvig/shadowbook',
     img: 'shadowbook',
     text: {
-      en: 'Chess opponent prep: play the person, not the engine. Scout any chess.com or Lichess player and spar against a bot that opens like them and plays on at their rating, then see where your preparation ran out. Runs in the browser with no account, so try the built-in demo player.',
-      sv: 'Schackförberedelser inför nästa motståndare: spela mot människan, inte motorn. Spana in valfri spelare på chess.com eller Lichess och träna mot en bot som öppnar som hen och spelar vidare på hens rating, och se var din förberedelse tog slut. Körs i webbläsaren utan konto, så testa den inbyggda demospelaren.',
+      en: 'Chess prep: spar against a bot that opens like any chess.com or Lichess player. The Library turns your openings, a Lichess study or your own games into decks you drill with spaced repetition. Free, in the browser, no account.',
+      sv: 'Schackförberedelser: träna mot en bot som öppnar som valfri spelare på chess.com eller Lichess. Library gör dina öppningar, en Lichess-studie eller dina egna partier till kortlekar som du nöter in med spaced repetition. Gratis, i webbläsaren, utan konto.',
     },
     status: 'Live',
   },
   {
     name: 'Släktsagan',
-    app: 'https://saga.godvig.com/',
+    app: 'https://xn--slktsagan-w2a.se/', // släktsagan.se, written in the form every browser and crawler accepts
     code: 'https://github.com/godvig/family-saga',
     img: 'slaktsagan',
     text: {
@@ -39,11 +39,13 @@ const projects = [
   },
   {
     name: { en: 'Hoard: size on disk for SteamOS', sv: 'Hoard: spelstorlek för SteamOS' },
+    code: 'https://github.com/godvig/decky-hoard',
+    img: 'hoard',
     text: {
-      en: 'A Decky Loader plugin that shows how much space each game takes, mods included, right on the game page in Gaming Mode.',
-      sv: 'Ett Decky Loader-plugin som visar hur mycket plats varje spel tar, moddar inräknade, direkt på spelsidan i Gaming Mode.',
+      en: 'A Decky Loader plugin that shows how much space each game really takes, mods and non-Steam games included, right on the game page in Gaming Mode.',
+      sv: 'Ett Decky Loader-plugin som visar hur mycket plats varje spel verkligen tar, moddar och spel utanför Steam inräknade, direkt på spelsidan i Gaming Mode.',
     },
-    status: { en: 'In progress', sv: 'Pågår' },
+    status: 'Beta',
   },
   {
     name: { en: 'This website', sv: 'Den här sidan' },

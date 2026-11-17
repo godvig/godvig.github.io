@@ -304,6 +304,7 @@ a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
 
 /* ---------- Contact ---------- */
 .contact { text-align: center; }
+.page.contact { padding-bottom: 3.5rem; }
 .contact-container { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
 .contact-box { display: flex; flex-direction: column; align-items: center; width: 110px; text-decoration: none; }
 .profile-pic { display: block; width: 90px; height: 90px; border-radius: 50%; background-repeat: no-repeat; transition: transform 0.2s; }
@@ -316,7 +317,7 @@ a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
 .couchsurfing-logo { background-image: url(/img/logos/couchsurfing-logo.png); height: 27.0px; }
 .linkedin-logo { background-image: url(/img/logos/linkedin-logo.png); height: 23.8px; }
 
-.phonemail { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 2rem; }
+.phonemail { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 3.5rem; }
 .phonemail a { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 0.6rem; }
 .phonemail a:hover { color: var(--orange); }
 .icon { width: 16px; height: 16px; background-size: 15px; background-repeat: no-repeat; background-position: center; display: inline-block; }
