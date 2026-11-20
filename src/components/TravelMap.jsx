@@ -17,7 +17,7 @@ const USA = 'United States of America';
 const CAN = 'Canada';
 const MAX_ZOOM = 300;
 // World Heritage symbols closer together than this on screen are drawn as one symbol with a count
-const CLUSTER_PX = 26;
+const CLUSTER_PX = 36;
 // How far in the map goes when a place is picked from the skyline at the top of the page
 const FOCUS_ZOOM = 5;
 
@@ -120,11 +120,11 @@ function Symbol({ kind, heritage = 'mixed', selected }) {
     return (
       <g>
         {halo}
-        <g transform={`scale(${s})`} className={`sym-unesco ${heritage}`}>
+        {/* A lone site is drawn small so the many of them do not drown the map; it grows when selected */}
+        <g transform={`scale(${selected ? s : 0.72})`} className={`sym-unesco ${heritage}`}>
           <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="left" />
           <path d="M0,-8 L8,0 L0,8 Z" className="right" />
           <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="edge" />
-          <circle r="2.4" className="dot" />
         </g>
       </g>
     );
@@ -245,7 +245,7 @@ export default function TravelMap() {
   const openCluster = members => {
     const lons = members.map(m => m.p.coords[0]), lats = members.map(m => m.p.coords[1]);
     const box = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
-    const k = Math.min(MAX_ZOOM, Math.max(fitTransform(box).k * 0.7, t.k * 1.6));
+    const k = Math.min(MAX_ZOOM, Math.max(fitTransform(box).k * 0.45, t.k * 1.6));
     setViewId(null);
     animateTo(centredOn([(box[0][0] + box[1][0]) / 2, (box[0][1] + box[1][1]) / 2], k));
   };
@@ -416,7 +416,7 @@ export default function TravelMap() {
                   >
                     <title>{names}</title>
                     <circle r="15" className="hit" />
-                    <g transform="scale(1.45)" className={`sym-unesco ${types.size === 1 ? [...types][0] : 'mixed'}`}>
+                    <g transform={`scale(${1.15 + Math.min(0.55, Math.log2(g.members.length) * 0.13)})`} className={`sym-unesco ${types.size === 1 ? [...types][0] : 'mixed'}`}>
                       <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="left" />
                       <path d="M0,-8 L8,0 L0,8 Z" className="right" />
                       <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="edge" />
