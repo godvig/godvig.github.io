@@ -9,8 +9,8 @@ export default function Home() {
         <div className="hello">
           <h1><span className="hi">{t({ en: 'Hi!', sv: 'Hej!' })}</span> <span className="name">{t({ en: "I'm Adam Englund", sv: 'Jag heter Adam Englund' })}</span></h1>
           <p className="tagline">{t({
-            en: 'Engineer and economist based in Gothenburg. I work with logistics integrations by day and build my own tools by night.',
-            sv: 'Civilingenjör och ekonom i Göteborg. På dagarna jobbar jag med logistikintegrationer, på kvällarna bygger jag egna verktyg.',
+            en: 'Engineer and economist based in Gothenburg. I work with system integrations and build tools that I want and use myself.',
+            sv: 'Civilingenjör och ekonom i Göteborg. Jag arbetar med systemintegrationer och bygger verktyg som jag själv vill ha och använder.',
           })}</p>
         </div>
         <div className="piccontainer">

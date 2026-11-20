@@ -5,6 +5,7 @@
   --navy-deep: rgb(10, 10, 50);
   --gold: rgb(207, 181, 59);
   --orange: #fa923f;
+  --wine: #8c2a36; /* a warm red picked to sit with the shirt in the portrait */
   --green: #4fae7e;
   --purple: #9b72d9;
   --text: #1d1d1d;
@@ -69,7 +70,7 @@ a:hover { color: var(--orange); }
   font-size: 20px;
   font-weight: 800;
   text-transform: uppercase;
-  color: rgba(255, 251, 38, 0.85);
+  color: var(--wine);
   opacity: 0;
   transition: opacity 0.4s;
 }
@@ -349,10 +350,10 @@ footer { background: var(--grey); }
   .page { padding: 3.5rem 1.25rem; }
 }
 @media (max-width: 520px) {
-  .rowsection { flex-direction: column-reverse; align-items: center; }
+  .rowsection { flex-direction: column; align-items: center; }
   .hello, .piccontainer { width: 100%; }
-  .hello { padding-top: 1.5rem; }
-  .piccontainer { padding-top: 2rem; }
+  .hello { padding-top: 2.5rem; }
+  .piccontainer { padding-top: 1.5rem; }
 }
 
 /* Map symbols: mountains and football */
