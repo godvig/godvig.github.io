@@ -3,9 +3,9 @@ import { useLang, useSetLang } from '../i18n.jsx';
 
 const links = [
   ['#home', 'HOME', 'HEM'],
-  ['#projects', 'PROJECTS', 'PROJEKT'],
   ['#about', 'ABOUT', 'OM MIG'],
   ['#experience', 'EXPERIENCE', 'ERFARENHET'],
+  ['#projects', 'PROJECTS', 'PROJEKT'],
   ['#map', 'MAP', 'KARTA'],
   ['#contact', 'CONTACT', 'KONTAKT'],
 ];

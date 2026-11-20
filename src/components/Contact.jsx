@@ -4,7 +4,6 @@ import { useT } from '../i18n.jsx';
 const profiles = [
   { id: 'linkedin', href: 'https://linkedin.com/in/adamenglund', label: 'LinkedIn' },
   { id: 'github', href: 'https://github.com/godvig', label: 'GitHub' },
-  { id: 'couchsurfing', href: 'https://couchsurfing.com/adam-englund', label: 'Couchsurfing' },
 ];
 
 export default function Contact() {

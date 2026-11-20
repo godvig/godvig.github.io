@@ -27,9 +27,9 @@ writeFileSync(file, en);
 
 const sv = [
   ['<html lang="en">', '<html lang="sv">'],
-  [/<title>[^<]*<\/title>/, '<title>Adam Englund – civilingenjör, integrationer och egna projekt</title>'],
-  [/<meta name="description" content="[^"]*">/, '<meta name="description" content="Adam Englund – applikationsspecialist på Centiro i Göteborg. Integrationer, logistikmjukvara, verktyg jag bygger på kvällarna och ett liv i sex länder.">'],
-  [/<meta property="og:description" content="[^"]*">/, '<meta property="og:description" content="Applikationsspecialist på Centiro i Göteborg. Integrationer, logistikmjukvara, verktyg jag bygger på kvällarna och ett liv i sex länder.">'],
+  [/<title>[^<]*<\/title>/, '<title>Adam Englund – systemintegration och lösningsdesign</title>'],
+  [/<meta name="description" content="[^"]*">/, '<meta name="description" content="Adam Englund – civilingenjör och ekonom i Göteborg. Systemintegration och lösningsdesign för globala varumärken, egna mjukvaruprojekt och ett liv i sex länder.">'],
+  [/<meta property="og:description" content="[^"]*">/, '<meta property="og:description" content="Civilingenjör och ekonom i Göteborg. Systemintegration och lösningsdesign för globala varumärken, egna mjukvaruprojekt och ett liv i sex länder.">'],
   [`<link rel="canonical" href="${SITE}/">`, `<link rel="canonical" href="${SITE}/sv/">`],
   [`<meta property="og:url" content="${SITE}/">`, `<meta property="og:url" content="${SITE}/sv/">\n  <meta property="og:locale" content="sv_SE">`],
   ['<div id="app"></div>', `<div id="app">${render('sv')}</div>`],

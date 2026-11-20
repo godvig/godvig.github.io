@@ -153,7 +153,7 @@ export default function TravelMap() {
   const [expanded, setExpanded] = useState({});
   const [viewId, setViewId] = useState('europe');
   // Per category: are its markers drawn, and is its area layer drawn (country colours / mountain ranges / national parks)?
-  const [show, setShow] = useState(() => Object.fromEntries(Object.keys(kinds).map(k => [k, { markers: k === 'lived', area: k === 'lived' }])));
+  const [show, setShow] = useState(() => Object.fromEntries(Object.keys(kinds).map(k => [k, { markers: k === 'lived' || k === 'work', area: k === 'lived' || k === 'work' }])));
 
   // Set up zoom: scroll wheel, pinch, double-click and dragging with the hand cursor
   useEffect(() => {

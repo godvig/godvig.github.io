@@ -1,15 +1,30 @@
 import React from 'react';
 import { useT } from '../i18n.jsx';
 
-// url: the employer's website, opened from the logo
+// url: the employer's website, opened from the logo. points: optional bullet list under the text.
+// DRAFT: the language levels further down are a best guess that matches the CV. Confirm before publishing.
 const jobs = [
   {
-    when: { en: '2022 – now', sv: '2022 – idag' }, role: { en: 'Application Specialist', sv: 'Applikationsspecialist' }, org: 'Centiro', place: { en: 'Gothenburg', sv: 'Göteborg' },
+    when: { en: '2022 – now', sv: '2022 – idag' }, role: { en: 'Application Specialist', sv: 'Applikationsspecialist' }, org: 'Centiro', place: 'Borås',
     logo: 'centiro', url: 'https://www.centiro.com/',
     text: {
-      en: 'Integrate customers\' warehouse management systems, mostly SAP and Manhattan, with Centiro\'s TMS. Customers include Zalando and other global fashion, sportswear and luxury brands. Client contact, testing, project management and development in C#/.NET, from customer feedback to production deploy. Led a six-month product trial for a major fashion brand one month into the job.',
-      sv: 'Integrerar kunders lagersystem, främst SAP och Manhattan, med Centiros TMS. Bland kunderna finns Zalando och andra globala mode-, sport- och lyxvarumärken. Kundkontakt, test, projektledning och utveckling i C#/.NET, från kundens feedback till driftsättning. Ledde en sex månader lång produkttest för ett stort modevarumärke redan efter en månad på jobbet.',
+      en: 'Dedicated to one customer at a time and the most senior member of my current client team. Four months at the Barcelona office in 2024 and regular on-site work with customers across Europe and the US.',
+      sv: 'Arbetar dedikerat mot en kund i taget och är den mest seniora i mitt nuvarande kundteam. Fyra månader på Barcelonakontoret 2024 och återkommande arbete på plats hos kunder i Europa och USA.',
     },
+    points: [
+      {
+        en: 'Work closely with major international brands in fashion, sportswear and luxury retail as their day-to-day technical and business contact, integrating their warehouse management systems (mainly SAP, also Manhattan) with our transport management platform.',
+        sv: 'Arbetar nära stora internationella varumärken inom mode, sport och lyx som deras dagliga tekniska och affärsmässiga kontakt, och integrerar deras lagersystem (främst SAP, även Manhattan) med vår transportplattform.',
+      },
+      {
+        en: 'Own integrations end to end, from requirements and solution architecture to API integration, testing, go-live and hypercare, and ship code to production myself (C#/.NET).',
+        sv: 'Äger integrationerna från början till slut, från krav och lösningsarkitektur till API-integration, test, driftsättning och hypercare, och driftsätter själv kod i produktion (C#/.NET).',
+      },
+      {
+        en: 'Lead projects and take broad ownership of the user experience, serving as a key link between customers and our visibility, execution and finance product teams.',
+        sv: 'Leder projekt och tar ett brett ansvar för användarupplevelsen, som en viktig länk mellan kunderna och våra produktteam för visibility, execution och finance.',
+      },
+    ],
   },
   {
     when: '2021 – 2022', role: { en: 'Purchase Planner, accessories', sv: 'Inköpsplanerare, tillbehör' }, org: 'Volvo Cars', place: { en: 'Gothenburg', sv: 'Göteborg' },
@@ -44,8 +59,8 @@ const jobs = [
     when: '2017', role: { en: 'Chairman', sv: 'Ordförande' }, org: 'ESTIEM Local Group Gothenburg', place: { en: 'Gothenburg', sv: 'Göteborg' },
     logo: 'estiem', url: 'https://estiem.org/',
     text: {
-      en: 'Led the Gothenburg board of the European Students of Industrial Engineering and Management, organising events for students from across Europe, including a semi-final of TIMES, Europe\'s largest case competition.',
-      sv: 'Ledde Göteborgsstyrelsen för European Students of Industrial Engineering and Management och arrangerade evenemang för studenter från hela Europa, bland annat en semifinal i TIMES, Europas största case-tävling.',
+      en: 'Led the Gothenburg board of the European Students of Industrial Engineering and Management, organising events for students from across Europe, including a semi-final of TIMES, Europe\'s largest case competition. Presented Chalmers\' master\'s programmes to hundreds of students at ESTIEM Council Meetings in Poznań and Izmir.',
+      sv: 'Ledde Göteborgsstyrelsen för European Students of Industrial Engineering and Management och arrangerade evenemang för studenter från hela Europa, bland annat en semifinal i TIMES, Europas största case-tävling. Presenterade Chalmers masterprogram för hundratals studenter på ESTIEM:s rådsmöten i Poznań och Izmir.',
     },
   },
   {
@@ -64,7 +79,7 @@ const jobs = [
     },
   },
   {
-    when: '2011 – 2015', role: { en: 'Equity Analyst, Financial Administrator and Board Member', sv: 'Aktieanalytiker, ekonomiansvarig och styrelseledamot' }, org: 'Kurdistan Investment Company', place: 'Lund',
+    when: '2011 – 2016', role: { en: 'Equity Analyst, Financial Administrator and Board Member', sv: 'Aktieanalytiker, ekonomiansvarig och styrelseledamot' }, org: 'Kurdistan Investment Company', place: 'Lund',
     logo: 'kic',
     text: {
       en: 'An investment company focused on the Kurdistan Region of Iraq. Wrote the monthly fact sheets for investors, analysed companies on the Iraq Stock Exchange for the investment committee and managed part of the portfolio. Ran the bookkeeping towards the auditors, presented the financial statements to the board, and travelled to Erbil to help prepare the launch of the Erbil Stock Exchange.',
@@ -77,7 +92,8 @@ const education = [
   ['Chalmers', { en: 'M.Sc. in Engineering (Swedish civilingenjör), Management and Economics of Innovation (2021)', sv: 'Civilingenjörsexamen, innovationsekonomi (2021)' }],
   [{ en: 'Lund University', sv: 'Lunds universitet' }, { en: 'B.Sc. Business and Economics, economics and public policy (2021)', sv: 'Ekonomie kandidatexamen, nationalekonomi och offentlig politik (2021)' }],
   ['Chalmers', { en: 'B.Sc. Industrial Engineering and Management, minor in IT (2019)', sv: 'Kandidatexamen, industriell ekonomi med inriktning IT (2019)' }],
-  [{ en: 'Exchanges', sv: 'Utbyten' }, { en: 'Queen\'s University (Canada), Politecnico di Milano (Italy), UNITECH International programme (2019/20)', sv: 'Queen\'s University (Kanada), Politecnico di Milano (Italien), UNITECH International-programmet (2019/20)' }],
+  ['UNITECH International', { en: 'Selected through assessment centres for the European network of leading technical universities and multinational companies (2019–2021)', sv: 'Antagen via assessment center till det europeiska nätverket av ledande tekniska universitet och multinationella företag (2019–2021)' }],
+  [{ en: 'Exchanges', sv: 'Utbyten' }, { en: 'Queen\'s University, Smith School of Business (Canada, 2014) and Politecnico di Milano (Italy, 2019)', sv: 'Queen\'s University, Smith School of Business (Kanada, 2014) och Politecnico di Milano (Italien, 2019)' }],
 ];
 
 const writing = [
@@ -111,8 +127,8 @@ const writing = [
 ];
 
 const languages = {
-  en: 'Swedish (native), English (fluent, IELTS 8.5), German (advanced), Italian (B1), Spanish (A2), and basic French, Luxembourgish, Danish and Norwegian.',
-  sv: 'Svenska (modersmål), engelska (flytande, IELTS 8,5), tyska (avancerad), italienska (B1), spanska (A2) samt grundläggande franska, luxemburgiska, danska och norska.',
+  en: 'Swedish (native), English (fluent, IELTS 8.5), Danish and Norwegian (professional working), German (strong foundation, currently refreshing), Italian (B1), Spanish (A2), and basic French and Luxembourgish.',
+  sv: 'Svenska (modersmål), engelska (flytande, IELTS 8,5), danska och norska (goda kunskaper i arbetet), tyska (god grund, fräschas upp), italienska (B1), spanska (A2) samt grundläggande franska och luxemburgiska.',
 };
 
 function Logo({ job }) {
@@ -141,6 +157,7 @@ export default function Experience() {
               <div>
                 <h3>{t(j.role)} <span className="org">· {j.org}, {t(j.place)}</span></h3>
                 {j.text && <p>{t(j.text)}</p>}
+                {j.points && <ul className="points">{j.points.map((pt, i) => <li key={i}>{t(pt)}</li>)}</ul>}
                 {j.link && <p><a href={j.link.href} target="_blank" rel="noopener noreferrer">{t(j.link.label)} ↗</a></p>}
               </div>
             </div>

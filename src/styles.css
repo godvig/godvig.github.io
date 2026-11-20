@@ -125,6 +125,16 @@ a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
 
 .backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 100; }
 
+/* ---------- Buttons ---------- */
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin: 1.75rem 0 0; }
+.btn {
+  display: inline-block; padding: 0.65rem 1.2rem; border-radius: 999px;
+  background: var(--navy); color: #fff; font-weight: 700; text-decoration: none; border: 2px solid var(--navy);
+}
+.btn:hover, .btn:focus-visible { background: var(--orange); border-color: var(--orange); color: #fff; }
+.btn.ghost { background: transparent; color: var(--navy); }
+.btn.ghost:hover, .btn.ghost:focus-visible { color: #fff; }
+
 /* ---------- Home ---------- */
 .section2 { position: relative; padding-bottom: 70px; }
 .rowsection {
@@ -138,7 +148,7 @@ a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
 .hello h1 span { display: block; }
 .hello h1 .hi { font-size: 64px; font-weight: 800; line-height: 1.1; }
 .hello h1 .name { font-size: 46px; margin-top: 0.4rem; line-height: 1.15; }
-.hello .tagline { font-size: 1.15rem; color: var(--muted); max-width: 26rem; margin: 1.5rem auto 0; line-height: 1.5; }
+.hello .tagline { font-size: 1.15rem; color: var(--muted); max-width: 30rem; margin: 1.5rem auto 0; line-height: 1.5; }
 .piccontainer { width: 50%; display: flex; align-items: flex-end; justify-content: center; }
 .cv-pic { width: 255px; height: auto; display: block; }
 
@@ -181,6 +191,8 @@ a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
 .timeline h3 { margin: 0; font-size: 1.15rem; }
 .timeline .org { font-weight: 400; color: var(--muted); }
 .timeline p { margin: 0.35rem 0 0; }
+.timeline .points { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+.timeline .points li { display: list-item; padding: 0; border-top: 0; margin-top: 0.3rem; }
 .timeline .job { display: flex; gap: 1rem; align-items: flex-start; }
 .timeline .logo {
   flex: none; display: flex; align-items: center; justify-content: center;
@@ -311,10 +323,8 @@ a.logo:hover, a.logo:focus-visible { transform: scale(1.06); }
 .contact-box:hover .profile-pic { transform: scale(1.06); }
 .linkedin-pic     { background-image: url(/img/pictures/linkedin.jpg); background-size: cover; background-position: center 15%; border: 3px solid rgb(0, 123, 182); }
 .github-pic       { background-image: url(https://github.com/godvig.png?size=180); background-size: 104%; background-position: center calc(100% + 9px); background-repeat: no-repeat; background-color: #fff; border: 4px solid #000; box-sizing: border-box; }
-.couchsurfing-pic { background-image: url(/img/pictures/couch.jpg);    background-size: 95px; background-position: -5px -10px; border: 3px solid rgb(224, 99, 70); }
 .profile-logo { display: block; width: 90px; margin-top: 6px; background-repeat: no-repeat; background-size: 90px; }
 .github-logo { background-image: url(/img/logos/github-logo.png); height: 24.2px; }
-.couchsurfing-logo { background-image: url(/img/logos/couchsurfing-logo.png); height: 27.0px; }
 .linkedin-logo { background-image: url(/img/logos/linkedin-logo.png); height: 23.8px; }
 
 .phonemail { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 3.5rem; }
