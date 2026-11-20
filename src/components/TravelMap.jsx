@@ -10,11 +10,19 @@ import canadaAtlas from '../data/canada-provinces.json';
 import { useT } from '../i18n.jsx';
 import { places, kinds, views, workCountries, workRegions, visitedCountries, visitedRegions, heritageTypes, svNames } from '../data/places.js';
 import { ranges, parks } from '../data/ranges.js';
+import { onFocusPlace, takePendingPlace } from '../mapFocus.js';
 
 const W = 960, H = 500;
 const USA = 'United States of America';
 const CAN = 'Canada';
 const MAX_ZOOM = 300;
+// Symbols of the same kind closer together than this on screen are drawn as one symbol with a count
+const CLUSTER_PX = 36;
+const CLUSTERED = ['unesco', 'visited'];
+// Marker layers that are too much together: switching one on switches its rivals off
+const RIVALS = { unesco: ['lived', 'visited'], lived: ['unesco'], visited: ['unesco'] };
+// How far in the map goes when a place is picked from the skyline at the top of the page
+const FOCUS_ZOOM = 5;
 
 // Kinds that colour a whole country, strongest first
 const FILL_RANK = { lived: 3, work: 2, visited: 1 };
@@ -87,6 +95,24 @@ function fitTransform([[w, s], [e, n]], maxK = MAX_ZOOM) {
   return zoomIdentity.translate(W / 2 - (k * (x0 + x1)) / 2, H / 2 - (k * (y0 + y1)) / 2).scale(k);
 }
 
+const centredOn = (coords, k) => {
+  const [x, y] = projection(coords);
+  return zoomIdentity.translate(W / 2 - k * x, H / 2 - k * y).scale(k);
+};
+
+// Group points that sit within `radius` of each other on screen. Each group keeps the average position.
+function cluster(items, radius) {
+  const groups = [];
+  for (const it of items) {
+    const g = groups.find(c => Math.hypot(c.x - it.x, c.y - it.y) < radius);
+    if (!g) { groups.push({ x: it.x, y: it.y, members: [it] }); continue; }
+    g.members.push(it);
+    g.x = g.members.reduce((sum, m) => sum + m.x, 0) / g.members.length;
+    g.y = g.members.reduce((sum, m) => sum + m.y, 0) / g.members.length;
+  }
+  return groups;
+}
+
 // ---------- Symbols ----------
 function Symbol({ kind, heritage = 'mixed', selected }) {
   const s = selected ? 1.4 : 1;
@@ -97,11 +123,11 @@ function Symbol({ kind, heritage = 'mixed', selected }) {
     return (
       <g>
         {halo}
-        <g transform={`scale(${s})`} className={`sym-unesco ${heritage}`}>
+        {/* A lone site is drawn small so the many of them do not drown the map; it grows when selected */}
+        <g transform={`scale(${selected ? s : 0.72})`} className={`sym-unesco ${heritage}`}>
           <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="left" />
           <path d="M0,-8 L8,0 L0,8 Z" className="right" />
           <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="edge" />
-          <circle r="2.4" className="dot" />
         </g>
       </g>
     );
@@ -149,11 +175,23 @@ export default function TravelMap() {
   const [t, setT] = useState(zoomIdentity);
   // On small screens the whole map is shrunk; scale symbols back up so they stay easy to tap
   const [ms, setMs] = useState(1);
-  const [selected, setSelected] = useState('gothenburg');
+  // A place picked from the skyline before the map had loaded wins over the default
+  const [asked] = useState(takePendingPlace);
+  const [selected, setSelected] = useState(asked || 'gothenburg');
   const [expanded, setExpanded] = useState({});
   const [viewId, setViewId] = useState('europe');
   // Per category: are its markers drawn, and is its area layer drawn (country colours / mountain ranges / national parks)?
   const [show, setShow] = useState(() => Object.fromEntries(Object.keys(kinds).map(k => [k, { markers: k === 'lived', area: k === 'lived' }])));
+
+  // Every change to the layers goes through here, so the rival rule holds wherever the change comes from
+  const updateShow = change => setShow(prev => {
+    const next = { ...change(prev) };
+    for (const [kind, rivals] of Object.entries(RIVALS)) {
+      if (!next[kind].markers || prev[kind].markers) continue;
+      for (const r of rivals) next[r] = { ...next[r], markers: false };
+    }
+    return next;
+  });
 
   // Set up zoom: scroll wheel, pinch, double-click and dragging with the hand cursor
   useEffect(() => {
@@ -169,13 +207,27 @@ export default function TravelMap() {
     select(svgRef.current).call(z);
     // Start zoomed in on Europe
     const europe = views.find(v => v.id === 'europe');
-    if (europe && europe.bounds) select(svgRef.current).call(z.transform, fitTransform(europe.bounds));
+    const askedPlace = places.find(p => p.id === asked);
+    if (askedPlace) {
+      setViewId(null);
+      select(svgRef.current).call(z.transform, centredOn(askedPlace.coords, FOCUS_ZOOM));
+    } else if (europe && europe.bounds) select(svgRef.current).call(z.transform, fitTransform(europe.bounds));
+    // Later picks from the skyline: select the place, make sure its marker is drawn and move there
+    const stopListening = onFocusPlace(id => {
+      takePendingPlace(); // the map is here to act on it, so nothing is left waiting
+      const p = places.find(x => x.id === id);
+      if (!p) return;
+      setSelected(p.id);
+      setViewId(null);
+      updateShow(prev => ({ ...prev, [p.kind]: { ...prev[p.kind], markers: true } }));
+      select(svgRef.current).transition().duration(750).call(z.transform, centredOn(p.coords, FOCUS_ZOOM));
+    });
     const ro = new ResizeObserver(([entry]) => {
       const w = entry.contentRect.width;
       if (w) setMs(Math.min(3, Math.max(1, W / w)));
     });
     ro.observe(svgRef.current);
-    return () => { ro.disconnect(); select(svgRef.current).on('.zoom', null); };
+    return () => { stopListening(); ro.disconnect(); select(svgRef.current).on('.zoom', null); };
   }, []);
 
   const animateTo = (transform, ms = 750) =>
@@ -199,8 +251,16 @@ export default function TravelMap() {
     const central = sx > W * 0.25 && sx < W * 0.75 && sy > H * 0.25 && sy < H * 0.75;
     if (central) return;
     setViewId(null);
-    const k = Math.max(t.k, 3);
-    animateTo(zoomIdentity.translate(W / 2 - k * x, H / 2 - k * y).scale(k));
+    animateTo(centredOn(p.coords, Math.max(t.k, 3)));
+  };
+
+  // A numbered symbol zooms in until its places come apart
+  const openCluster = members => {
+    const lons = members.map(m => m.p.coords[0]), lats = members.map(m => m.p.coords[1]);
+    const box = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
+    const k = Math.min(MAX_ZOOM, Math.max(fitTransform(box).k * 0.45, t.k * 1.6));
+    setViewId(null);
+    animateTo(centredOn([(box[0][0] + box[1][0]) / 2, (box[0][1] + box[1][1]) / 2], k));
   };
 
   // Clicking anywhere on the map that isn't a symbol clears the selection
@@ -244,18 +304,30 @@ export default function TravelMap() {
   // Mountains + ranges and World Heritage + parks sit together: the first tap turns on both halves,
   // after that each half toggles on its own.
   const pairs = [['mountain', { en: 'Mountain ranges', sv: 'Bergskedjor' }], ['unesco', { en: 'Parks', sv: 'Parker' }]];
-  const togglePair = (kind, part) => setShow(prev => {
+  const togglePair = (kind, part) => updateShow(prev => {
     const cur = prev[kind];
     const next = !cur.markers && !cur.area ? { markers: true, area: true } : { ...cur, [part]: !cur[part] };
     return { ...prev, [kind]: next };
   });
   const activeExtras = markerKinds.filter(k => show[k].markers).length + (show.mountain.area ? 1 : 0) + (show.unesco.area ? 1 : 0);
-  const toggle = (kind, part) => setShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
+  const toggle = (kind, part) => updateShow(prev => ({ ...prev, [kind]: { ...prev[kind], [part]: !prev[kind][part] } }));
 
   const current = places.find(p => p.id === selected);
   const showLabels = t.k >= 3;
   const ordered = [...drawn.filter(p => p.id !== selected), ...drawn.filter(p => p.id === selected)];
   const hatch = 6 / t.k;
+  const whenText = w => (typeof w === 'string' ? (sv ? w.replace('now', 'idag') : w) : tr(w));
+
+  // Where each marker lands on screen. World Heritage sites and visited places that would overlap become one
+  // numbered symbol per kind, which splits up as the visitor zooms in. The selected place always stands alone.
+  const onScreen = ordered
+    .map(p => { const [x, y] = t.apply(projection(p.coords)); return { p, x, y }; })
+    .filter(m => m.x > -20 && m.x < W + 20 && m.y > -20 && m.y < H + 20);
+  const loose = m => !CLUSTERED.includes(m.p.kind) || m.p.id === selected;
+  const groups = CLUSTERED.flatMap(kind => cluster(onScreen.filter(m => !loose(m) && m.p.kind === kind), CLUSTER_PX * ms));
+  const clusters = groups.filter(g => g.members.length > 1);
+  const single = new Set(groups.filter(g => g.members.length === 1).map(g => g.members[0].p.id));
+  const markers = onScreen.filter(m => loose(m) || single.has(m.p.id));
 
   return (
     <section id="map" className="page map-page">
@@ -341,9 +413,38 @@ export default function TravelMap() {
               ))}
             </g>
             <g>
-              {ordered.map(p => {
-                const [x, y] = t.apply(projection(p.coords));
-                if (x < -20 || x > W + 20 || y < -20 || y > H + 20) return null;
+              {clusters.map(g => {
+                const kind = g.members[0].p.kind;
+                const n = g.members.length;
+                const types = new Set(g.members.map(m => m.p.heritage));
+                const names = g.members.map(m => nm(m.p.city)).sort().join(', ');
+                return (
+                  <g
+                    key={g.members.map(m => m.p.id).join('+')}
+                    className={`marker ${kind} cluster`}
+                    transform={`translate(${g.x},${g.y}) scale(${ms})`}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={kind === 'unesco'
+                      ? tr({ en: `${n} World Heritage sites, zoom in`, sv: `${n} världsarv, zooma in` })
+                      : tr({ en: `${n} visited places, zoom in`, sv: `${n} besökta platser, zooma in` })}
+                    onClick={() => openCluster(g.members)}
+                    onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), openCluster(g.members))}
+                  >
+                    <title>{names}</title>
+                    <circle r="15" className="hit" />
+                    {kind === 'unesco' ? (
+                      <g transform={`scale(${1.15 + Math.min(0.55, Math.log2(g.members.length) * 0.13)})`} className={`sym-unesco ${types.size === 1 ? [...types][0] : 'mixed'}`}>
+                        <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="left" />
+                        <path d="M0,-8 L8,0 L0,8 Z" className="right" />
+                        <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="edge" />
+                      </g>
+                    ) : <circle r={7 + Math.min(4, Math.log2(n) * 1.3)} />}
+                    <text y="3.5">{n}</text>
+                  </g>
+                );
+              })}
+              {markers.map(({ p, x, y }) => {
                 const isSel = p.id === selected;
                 const label = isSel || (showLabels && (p.kind === 'lived' || p.kind === 'work'));
                 return (
@@ -378,7 +479,7 @@ export default function TravelMap() {
                 {regionOf[current.id]
                   ? `${regionOf[current.id]}, ${current.country === USA ? 'USA' : 'Canada'}`
                   : current.country === current.city ? tr(kinds[current.kind]) : nm(current.country)}
-                {current.when ? ` · ${sv ? current.when.replace('now', 'idag') : current.when}` : ''}
+                {current.when ? ` · ${whenText(current.when)}` : ''}
               </p>
               {current.kind === 'unesco' && (
                 <p className="heritage">
