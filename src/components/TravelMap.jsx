@@ -21,6 +21,15 @@ const CLUSTER_PX = 36;
 const CLUSTERED = ['unesco', 'visited'];
 // Marker layers that are too much together: switching one on switches its rivals off
 const RIVALS = { unesco: ['lived', 'visited'], lived: ['unesco'], visited: ['unesco'] };
+
+// World Heritage is split in two halves that switch on their own: `markers` means the cultural sites,
+// `area` means the natural sites together with the hatched national parks. A mixed site shows when either is on.
+const showsPlace = (show, p) => {
+  if (p.kind !== 'unesco') return show[p.kind].markers;
+  const u = show.unesco;
+  return p.heritage === 'cultural' ? u.markers : p.heritage === 'natural' ? u.area : u.markers || u.area;
+};
+const kindOn = (show, kind) => (kind === 'unesco' ? show.unesco.markers || show.unesco.area : show[kind].markers);
 // How far in the map goes when a place is picked from the skyline at the top of the page
 const FOCUS_ZOOM = 5;
 
@@ -114,7 +123,7 @@ function cluster(items, radius) {
 }
 
 // ---------- Symbols ----------
-function Symbol({ kind, heritage = 'mixed', selected }) {
+function Symbol({ kind, heritage = 'mixed', selected, full }) {
   const s = selected ? 1.4 : 1;
   // Selected symbols get a red ring with a white outline behind them
   const halo = selected && kind !== 'lived' && kind !== 'work' && kind !== 'visited'
@@ -123,8 +132,9 @@ function Symbol({ kind, heritage = 'mixed', selected }) {
     return (
       <g>
         {halo}
-        {/* A lone site is drawn small so the many of them do not drown the map; it grows when selected */}
-        <g transform={`scale(${selected ? s : 0.72})`} className={`sym-unesco ${heritage}`}>
+        {/* A lone site is drawn small so the many of them do not drown the map; it grows when selected.
+            The legend (full) uses the normal size. */}
+        <g transform={`scale(${selected ? s : full ? 1 : 0.72})`} className={`sym-unesco ${heritage}`}>
           <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="left" />
           <path d="M0,-8 L8,0 L0,8 Z" className="right" />
           <path d="M0,-8 L8,0 L0,8 L-8,0 Z" className="edge" />
@@ -158,9 +168,9 @@ function Symbol({ kind, heritage = 'mixed', selected }) {
   return <circle r={selected ? 9 : kind === 'visited' ? 4.5 : 6} />;
 }
 
-function Legend({ kind }) {
+function Legend({ kind, heritage }) {
   if (kind === 'mountain' || kind === 'football' || kind === 'unesco') {
-    return <svg className="legend-icon" viewBox="-10 -10 20 20" aria-hidden="true"><Symbol kind={kind} /></svg>;
+    return <svg className="legend-icon" viewBox="-10 -10 20 20" aria-hidden="true"><Symbol kind={kind} heritage={heritage} full /></svg>;
   }
   return <span className={`swatch ${kind}`} />;
 }
@@ -187,8 +197,8 @@ export default function TravelMap() {
   const updateShow = change => setShow(prev => {
     const next = { ...change(prev) };
     for (const [kind, rivals] of Object.entries(RIVALS)) {
-      if (!next[kind].markers || prev[kind].markers) continue;
-      for (const r of rivals) next[r] = { ...next[r], markers: false };
+      if (!kindOn(next, kind) || kindOn(prev, kind)) continue;
+      for (const r of rivals) next[r] = r === 'unesco' ? { markers: false, area: false } : { ...next[r], markers: false };
     }
     return next;
   });
@@ -269,7 +279,7 @@ export default function TravelMap() {
     if (!e.target.closest('.marker')) setSelected(null);
   };
 
-  const drawn = places.filter(p => show[p.kind].markers);
+  const drawn = places.filter(p => showsPlace(show, p));
   const coloured = places.filter(p => show[p.kind].area);
 
   // Colour countries, states and provinces: lived (purple) > work (yellow) > visited (green).
@@ -301,9 +311,12 @@ export default function TravelMap() {
   const mainPart = { lived: 'area', work: 'area', visited: 'area', mountain: 'markers', football: 'markers', unesco: 'markers' };
   const toggleKind = kind => toggle(kind, mainPart[kind]);
   const markerKinds = ['lived', 'work', 'visited', 'mountain', 'unesco', 'football'];
-  // Mountains + ranges and World Heritage + parks sit together: the first tap turns on both halves,
+  // Mountains + ranges, and cultural + natural World Heritage, sit together: the first tap turns on both halves,
   // after that each half toggles on its own.
-  const pairs = [['mountain', { en: 'Mountain ranges', sv: 'Bergskedjor' }], ['unesco', { en: 'Parks', sv: 'Parker' }]];
+  const pairs = [
+    ['mountain', { label: kinds.mountain }, { label: { en: 'Mountain ranges', sv: 'Bergskedjor' } }],
+    ['unesco', { label: { en: 'Cultural heritage', sv: 'Kulturarv' }, heritage: 'cultural' }, { label: { en: 'Natural heritage', sv: 'Naturarv' }, heritage: 'natural' }],
+  ];
   const togglePair = (kind, part) => updateShow(prev => {
     const cur = prev[kind];
     const next = !cur.markers && !cur.area ? { markers: true, area: true } : { ...cur, [part]: !cur[part] };
@@ -359,13 +372,13 @@ export default function TravelMap() {
               <Legend kind={k} />{tr(kinds[k])}
             </button>
           ))}
-          {pairs.map(([k, areaLabel]) => (
+          {pairs.map(([k, first, second]) => (
             <span key={k} className="chip-pair" role="group" aria-label={tr(kinds[k])}>
               <button className={`filter-chip small ${k}${show[k].markers ? ' on' : ''}`} aria-pressed={show[k].markers} onClick={() => togglePair(k, 'markers')}>
-                <Legend kind={k} />{tr(kinds[k])}
+                <Legend kind={k} heritage={first.heritage} />{tr(first.label)}
               </button>
               <button className={`filter-chip small ${k}${show[k].area ? ' on' : ''}`} aria-pressed={show[k].area} onClick={() => togglePair(k, 'area')}>
-                {tr(areaLabel)}
+                {second.heritage && <Legend kind={k} heritage={second.heritage} />}{tr(second.label)}
               </button>
             </span>
           ))}
@@ -495,9 +508,9 @@ export default function TravelMap() {
               )}
             </>
           )}
-          {Object.entries(kinds).filter(([k]) => show[k].markers).map(([k, label]) => {
+          {Object.entries(kinds).filter(([k]) => kindOn(show, k)).map(([k, label]) => {
             label = tr(label);
-            const all = places.filter(p => p.kind === k)
+            const all = places.filter(p => p.kind === k && showsPlace(show, p))
               .sort((x, y) => (k === 'unesco' ? x.city.localeCompare(y.city) : 0));
             const open = expanded[k];
             let list = all;
