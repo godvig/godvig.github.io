@@ -103,8 +103,8 @@ const writing = [
     title: 'Höghastighetsjärnvägar i Sverige: En samhällsekonomisk analys',
     meta: { en: 'B.Sc. thesis in Swedish · Lund University · 2021', sv: 'Kandidatuppsats · Lunds universitet · 2021' },
     text: {
-      en: 'A cost-benefit analysis of high-speed rail in Sweden. The project comes out deeply unprofitable, at a net cost to society of around SEK 300 billion, so the thesis asks why such investments are made anyway, and finds part of the answer in public choice theory: the incentives of politicians, regions and agencies can outweigh the calculations.',
-      sv: 'En samhällsekonomisk kalkyl för höghastighetståg i Sverige. Projektet visar sig mycket olönsamt, med en samhällsekonomisk förlust på omkring 300 miljarder kronor, så uppsatsen frågar varför sådana investeringar görs ändå och hittar en del av svaret i public choice-teori: politikers, regioners och myndigheters drivkrafter kan väga tyngre än kalkylerna.',
+      en: 'A cost-benefit analysis of high-speed rail in Sweden. The project comes out deeply unprofitable, costing the state around SEK 300 billion, so the thesis asks why such investments are made anyway, and finds part of the answer in public choice theory: the incentives of politicians, regions and agencies can outweigh the calculations.',
+      sv: 'En samhällsekonomisk kalkyl för höghastighetståg i Sverige. Projektet visar sig mycket olönsamt, och skulle kosta staten omkring 300 miljarder kronor, så uppsatsen frågar varför sådana investeringar görs ändå och hittar en del av svaret i public choice-teori: politikers, regioners och myndigheters drivkrafter kan väga tyngre än kalkylerna.',
     },
     href: 'https://lup.lub.lu.se/student-papers/record/9036323',
   },
