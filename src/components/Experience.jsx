@@ -92,7 +92,7 @@ const writing = [
   },
   {
     title: 'Auto-generated Web Application for User Acquisition through SEO within Women\'s Football',
-    meta: { en: 'B.Sc. thesis · Chalmers and University of Gothenburg · 2019 · with Forza Football, in a group of six', sv: 'Kandidatarbete · Chalmers och Göteborgs universitet · 2019 · med Forza Football, i en grupp om sex' },
+    meta: { en: 'B.Sc. thesis · Chalmers and University of Gothenburg · 2019 · with Forza Football · I led the SEO work in a group of six', sv: 'Kandidatarbete · Chalmers och Göteborgs universitet · 2019 · med Forza Football · jag ansvarade för SEO i en grupp om sex' },
     text: {
       en: 'A livescore site for women\'s football (Next.js and React on Forza Football\'s data) that generated a page for every match, team, tournament and player, to test whether search rankings can bring users to a mobile app. In its first two months it ranked first for several targeted searches and passed 350,000 impressions on Google.',
       sv: 'En livescore-sajt för damfotboll (Next.js och React på Forza Footballs data) som genererade en sida för varje match, lag, turnering och spelare, för att testa om sökmotorplaceringar kan ge användare till en mobilapp. Under de första två månaderna rankades den etta på flera av de sökord vi siktade på och fick över 350 000 visningar på Google.',
@@ -103,8 +103,8 @@ const writing = [
     title: 'Höghastighetsjärnvägar i Sverige: En samhällsekonomisk analys',
     meta: { en: 'B.Sc. thesis in Swedish · Lund University · 2021', sv: 'Kandidatuppsats · Lunds universitet · 2021' },
     text: {
-      en: 'A cost-benefit analysis of high-speed rail in Sweden. The project comes out deeply unprofitable, so the thesis asks why such investments are made anyway, and finds part of the answer in public choice theory: the incentives of politicians, regions and agencies can outweigh the calculations.',
-      sv: 'En samhällsekonomisk kalkyl för höghastighetståg i Sverige. Projektet visar sig mycket olönsamt, så uppsatsen frågar varför sådana investeringar görs ändå och hittar en del av svaret i public choice-teori: politikers, regioners och myndigheters drivkrafter kan väga tyngre än kalkylerna.',
+      en: 'A cost-benefit analysis of high-speed rail in Sweden. The project comes out deeply unprofitable, at a net cost to society of around SEK 300 billion, so the thesis asks why such investments are made anyway, and finds part of the answer in public choice theory: the incentives of politicians, regions and agencies can outweigh the calculations.',
+      sv: 'En samhällsekonomisk kalkyl för höghastighetståg i Sverige. Projektet visar sig mycket olönsamt, med en samhällsekonomisk förlust på omkring 300 miljarder kronor, så uppsatsen frågar varför sådana investeringar görs ändå och hittar en del av svaret i public choice-teori: politikers, regioners och myndigheters drivkrafter kan väga tyngre än kalkylerna.',
     },
     href: 'https://lup.lub.lu.se/student-papers/record/9036323',
   },
